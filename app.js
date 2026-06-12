@@ -66,6 +66,30 @@
 
   initLivingBackground();
 
+  /* ── Scroll Reveal ── */
+  function initScrollReveal() {
+    var sections = document.querySelectorAll('.section');
+    sections.forEach(function (s) { s.classList.add('reveal'); });
+
+    if (!('IntersectionObserver' in window)) {
+      sections.forEach(function (s) { s.classList.add('is-visible'); });
+      return;
+    }
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    sections.forEach(function (s) { obs.observe(s); });
+  }
+
+  initScrollReveal();
+
   const cases = (window.CASES_DATA && window.CASES_DATA.cases) || [];
 
   // Ordena: destaque primeiro, mantendo a ordem original entre eles

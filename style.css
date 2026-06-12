@@ -414,19 +414,23 @@ a {
   content: '';
   position: absolute;
   left: calc(var(--gutter) + var(--spine-offset));
-  top: 0;
-  bottom: 0;
+  top: 0; bottom: 0;
   width: 1px;
-  background: var(--line-on-cream);
+  background: var(--line);
 }
 
 .section--sobre,
-.section--ferramentas { background: var(--cream); }
-.section--trabalho { background: var(--cream-dim); }
+.section--ferramentas { background: transparent; }
+.section--trabalho    { background: rgba(11,37,80,0.4); }
 
-.section .eyebrow .node {
-  position: relative;
-  margin-left: -1.375rem;
+.section .eyebrow .node { position: relative; margin-left: -1.375rem; }
+
+.section__intro { color: var(--fg-muted); }
+.sobre__lead    { color: var(--fg); }
+
+.ferramentas__lista li {
+  color: var(--fg);
+  border-color: var(--line-bright);
 }
 
 @media (min-width: 760px) {
@@ -844,3 +848,16 @@ a {
 }
 
 body.modal-open { overflow: hidden; }
+
+/* =========================================================================
+   SCROLL REVEAL
+   ========================================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
