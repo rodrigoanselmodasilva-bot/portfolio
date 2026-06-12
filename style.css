@@ -117,11 +117,10 @@ a {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(197,138,74,0.09), transparent 65%);
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
-  transition: left 0.9s ease, top 0.9s ease;
-  will-change: left, top;
+  left: 0;
+  top: 0;
+  transition: transform 0.9s ease;
+  will-change: transform;
 }
 
 /* Camada 2: SVG de nós (gerado por JS, posicionado aqui) */
@@ -499,7 +498,7 @@ a {
 .case-row {
   display: grid;
   grid-template-columns: 2.5rem 1fr 2rem;
-  align-items: baseline;
+  align-items: center;
   gap: 1rem;
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--line);
@@ -570,7 +569,7 @@ a {
 }
 .case-row:hover .case-row__expand,
 .case-row:focus .case-row__expand {
-  max-height: 5rem;
+  max-height: 10rem;
   opacity: 1;
   margin-top: 0.75rem;
 }

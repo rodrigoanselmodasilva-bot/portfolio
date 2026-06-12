@@ -8,8 +8,9 @@
     // Glow segue o mouse (apenas em desktop)
     if (window.matchMedia('(pointer: fine)').matches) {
       window.addEventListener('mousemove', function (e) {
-        glow.style.left = e.clientX + 'px';
-        glow.style.top  = e.clientY + 'px';
+        var x = e.clientX - 350; // center the 700px orb on cursor
+        var y = e.clientY - 350;
+        glow.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
       }, { passive: true });
     }
 
