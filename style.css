@@ -2,23 +2,33 @@
    TOKENS
    ========================================================================= */
 :root {
-  --navy: #1A2942;
-  --navy-deep: #121C30;
-  --clay: #A66A3F;
-  --clay-light: #C99A6F;
-  --cream: #F3EFE7;
-  --cream-dim: #E8DFD0;
+  /* ── Marca (inalterado) ── */
+  --clay:       #C58A4A;   /* bronze (mais vibrante no escuro) */
+  --clay-light: #E0AA6A;
 
-  --line-on-cream: rgba(26, 41, 66, 0.14);
-  --line-on-navy: rgba(243, 239, 231, 0.18);
+  /* ── Tema dark ── */
+  --bg:         #071B3A;   /* fundo principal */
+  --bg-alt:     #0B2550;   /* fundo alternativo de seção */
+  --bg-deep:    #041327;   /* mais escuro (footer, modal) */
+  --fg:         #F2EFE7;   /* texto principal */
+  --fg-muted:   rgba(242, 239, 231, 0.65);
+  --line:       rgba(242, 239, 231, 0.1);
+  --line-bright:rgba(242, 239, 231, 0.2);
 
+  /* ── Compat (usados em calc/SVG) ── */
+  --navy:       #071B3A;
+  --navy-deep:  #041327;
+  --cream:      #F2EFE7;
+  --cream-dim:  #0B2550;
+  --line-on-cream: rgba(242, 239, 231, 0.1);
+  --line-on-navy:  rgba(242, 239, 231, 0.18);
+
+  /* ── Layout ── */
   --font-display: 'Cinzel', 'Georgia', serif;
-  --font-body: 'Manrope', -apple-system, sans-serif;
-
-  --max: 1080px;
+  --font-body:    'Manrope', -apple-system, sans-serif;
+  --max:    1080px;
   --gutter: 1.5rem;
   --radius: 3px;
-
   --spine-offset: 0.9rem;
 }
 
@@ -34,9 +44,10 @@ body {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.7;
-  color: var(--navy);
-  background: var(--cream);
+  color: var(--fg);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img { max-width: 100%; display: block; }
