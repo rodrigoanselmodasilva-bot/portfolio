@@ -127,47 +127,41 @@
       btn.addEventListener('click', () => {
         activeTag = btn.dataset.tag;
         renderFiltros();
-        renderCases();
+        renderCasesAsList();
       });
     });
   }
 
-  /* ---------- Cards ---------- */
-  function renderCases() {
-    const visible = ordered.filter(
-      (c) => activeTag === 'Todos' || (c.tags || []).includes(activeTag)
-    );
+  /* ---------- Lista editorial ---------- */
+  function renderCasesAsList() {
+    var visible = ordered.filter(function (c) {
+      return activeTag === 'Todos' || (c.tags || []).includes(activeTag);
+    });
 
     if (!visible.length) {
       grid.innerHTML = '<p class="cases__empty">Nenhum case com esse filtro ainda.</p>';
       return;
     }
 
-    grid.innerHTML = visible
-      .map(
-        (c) => `
-        <button class="case-card" data-id="${escapeAttr(c.id)}">
-          <span class="case-card__media">
-            ${c.capa ? `<img src="${escapeAttr(c.capa)}" alt="" loading="lazy" />` : ''}
-          </span>
-          <span class="case-card__body">
-            <span class="case-card__meta">
-              <span>${escapeHtml(c.cliente || '')}</span>
-              <span>${escapeHtml(String(c.ano || ''))}</span>
-            </span>
-            <span class="case-card__title">${escapeHtml(c.titulo || '')}</span>
-            <span class="case-card__resumo">${escapeHtml(c.resumo || '')}</span>
-            <span class="case-card__tags">
-              ${(c.tags || []).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
-            </span>
-          </span>
-        </button>
-      `
-      )
-      .join('');
+    grid.innerHTML = visible.map(function (c, idx) {
+      var num = String(idx + 1).padStart(2, '0');
+      var meta = [c.cliente, c.ano ? String(c.ano) : '', (c.tags || []).join(' · ')]
+        .filter(Boolean).join(' · ');
+      return (
+        '<button class="case-row" data-id="' + escapeAttr(c.id) + '">' +
+          '<span class="case-row__num">' + escapeHtml(num) + '</span>' +
+          '<div>' +
+            '<p class="case-row__title">' + escapeHtml(c.titulo || '') + '</p>' +
+            '<p class="case-row__meta">' + escapeHtml(meta) + '</p>' +
+            '<p class="case-row__expand">' + escapeHtml(c.resumo || '') + '</p>' +
+          '</div>' +
+          '<span class="case-row__arrow"></span>' +
+        '</button>'
+      );
+    }).join('');
 
-    grid.querySelectorAll('.case-card').forEach((card) => {
-      card.addEventListener('click', () => openModal(card.dataset.id));
+    grid.querySelectorAll('.case-row').forEach(function (row) {
+      row.addEventListener('click', function () { openModal(row.dataset.id); });
     });
   }
 
@@ -268,5 +262,5 @@
 
   /* ---------- Init ---------- */
   renderFiltros();
-  renderCases();
+  renderCasesAsList();
 })();
