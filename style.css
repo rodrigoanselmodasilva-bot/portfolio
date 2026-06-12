@@ -620,24 +620,29 @@ a {
    ========================================================================= */
 .footer {
   position: relative;
-  background: var(--navy-deep);
-  color: var(--cream);
+  background: var(--bg-deep);
+  color: var(--fg);
   padding: 5rem var(--gutter) 3rem;
   overflow: hidden;
 }
 
-.footer__constellation {
-  position: absolute;
-  inset: 0;
-  opacity: 0.4;
-}
+.footer__constellation { position: absolute; inset: 0; opacity: 0.5; }
 .footer__constellation svg { width: 100%; height: 100%; }
 
-.footer__content {
-  position: relative;
-  z-index: 1;
-  max-width: 32rem;
+.footer__constellation .constellation-lines line {
+  stroke: rgba(197,138,74,0.3);
+  stroke-width: 0.6;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: draw-line 2s ease-out forwards;
 }
+.footer__constellation .constellation-nodes circle {
+  fill: var(--clay);
+  opacity: 0;
+  animation: reveal-up 0.5s ease forwards 1.8s;
+}
+
+.footer__content { position: relative; z-index: 1; max-width: 32rem; }
 
 .footer__title {
   font-family: var(--font-display);
@@ -645,30 +650,16 @@ a {
   font-size: clamp(1.8rem, 6vw, 2.6rem);
   line-height: 1.25;
   margin: 0 0 1rem;
+  color: var(--fg);
 }
 
-.footer__lead {
-  color: rgba(243, 239, 231, 0.78);
-  margin: 0 0 1.75rem;
-  max-width: 28em;
-}
+.footer__lead { color: var(--fg-muted); margin: 0 0 1.75rem; max-width: 28em; }
 
-.footer__social {
-  display: flex;
-  gap: 1.5rem;
-  margin: 1.75rem 0 0;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-.footer__social a { border-bottom: 1px solid var(--line-on-navy); padding-bottom: 0.2rem; }
+.footer__social { display: flex; gap: 1.5rem; margin: 1.75rem 0 0; font-size: 0.875rem; font-weight: 700; }
+.footer__social a { border-bottom: 1px solid var(--line-bright); padding-bottom: 0.2rem; color: var(--fg-muted); }
 .footer__social a:hover { color: var(--clay-light); border-color: var(--clay-light); }
 
-.footer__copy {
-  margin-top: 3rem;
-  font-size: 0.75rem;
-  color: rgba(243, 239, 231, 0.45);
-  letter-spacing: 0.04em;
-}
+.footer__copy { margin-top: 3rem; font-size: 0.75rem; color: rgba(242,239,231,0.35); letter-spacing: 0.04em; }
 
 /* =========================================================================
    MODAL
