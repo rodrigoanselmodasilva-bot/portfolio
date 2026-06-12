@@ -228,9 +228,10 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 1rem var(--gutter);
-  background: rgba(243, 239, 231, 0.86);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line-on-cream);
+  background: rgba(4, 19, 39, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
 }
 
 .nav__brand {
@@ -246,6 +247,7 @@ a {
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.02em;
+  color: var(--fg);
 }
 
 .nav__links {
@@ -258,6 +260,7 @@ a {
 .nav__links a {
   position: relative;
   padding: 0.25rem 0;
+  color: var(--fg-muted);
 }
 .nav__links a:hover { color: var(--clay); }
 
