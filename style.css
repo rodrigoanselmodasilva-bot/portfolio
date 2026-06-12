@@ -611,7 +611,7 @@ a {
   font-size: 0.875rem;
   font-weight: 700;
   padding: 0.55rem 1.1rem;
-  border: 1px solid var(--line-on-cream);
+  border: 1px solid var(--line-bright);
   border-radius: 999px;
 }
 
