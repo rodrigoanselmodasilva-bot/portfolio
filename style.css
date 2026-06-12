@@ -684,7 +684,7 @@ a {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(18, 28, 48, 0.6);
+  background: rgba(4, 19, 39, 0.8);
 }
 
 .modal__panel {
@@ -692,15 +692,15 @@ a {
   inset: 0;
   margin: 0 auto;
   max-width: 760px;
-  background: var(--cream);
+  background: var(--bg-alt);
+  color: var(--fg);
   overflow-y: auto;
   padding: 3.5rem var(--gutter) 4rem;
 }
 
 @media (min-width: 760px) {
   .modal__panel {
-    top: 3vh;
-    bottom: 3vh;
+    top: 3vh; bottom: 3vh;
     border-radius: 8px;
     padding: 3.5rem 3rem 4rem;
   }
@@ -711,12 +711,11 @@ a {
   top: max(1rem, calc(3vh + 1rem));
   right: max(1rem, calc((100vw - 760px) / 2 + 1rem));
   z-index: 5;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.5rem; height: 2.5rem;
   border-radius: 50%;
-  border: 1px solid var(--line-on-cream);
-  background: var(--cream);
-  color: var(--navy);
+  border: 1px solid var(--line-bright);
+  background: var(--bg-alt);
+  color: var(--fg);
   font-size: 1rem;
   cursor: pointer;
   line-height: 1;
@@ -729,7 +728,7 @@ a {
   margin-bottom: 1.75rem;
   aspect-ratio: 16/9;
   object-fit: cover;
-  background: var(--cream-dim);
+  background: var(--bg-deep);
 }
 
 .modal__meta {
@@ -738,12 +737,11 @@ a {
   gap: 1rem;
   margin: 1.75rem 0;
   padding: 1.25rem 0;
-  border-top: 1px solid var(--line-on-cream);
-  border-bottom: 1px solid var(--line-on-cream);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
-@media (min-width: 540px) {
-  .modal__meta { grid-template-columns: repeat(4, 1fr); }
-}
+@media (min-width: 540px) { .modal__meta { grid-template-columns: repeat(4, 1fr); } }
+
 .modal__meta dt {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -752,11 +750,7 @@ a {
   color: var(--clay);
   margin: 0 0 0.3rem;
 }
-.modal__meta dd {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 500;
-}
+.modal__meta dd { margin: 0; font-size: 0.9375rem; font-weight: 500; color: var(--fg); }
 
 .modal__title {
   font-family: var(--font-display);
@@ -764,55 +758,35 @@ a {
   font-size: clamp(1.5rem, 5vw, 2rem);
   line-height: 1.3;
   margin: 0 0 0.5rem;
+  color: var(--fg);
 }
-
-.modal__resumo {
-  font-size: 1.0625rem;
-  color: rgba(26, 41, 66, 0.75);
-  margin: 0;
-}
+.modal__resumo { font-size: 1.0625rem; color: var(--fg-muted); margin: 0; }
 
 .modal__section-title {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 1.15rem;
   margin: 2.5rem 0 1rem;
+  color: var(--fg);
 }
 
-.modal__processo {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+.modal__processo { list-style: none; margin: 0; padding: 0; }
 .modal__processo li {
   position: relative;
   padding: 0 0 1.75rem 1.75rem;
-  border-left: 1px solid var(--line-on-cream);
+  border-left: 1px solid var(--line);
 }
-.modal__processo li:last-child {
-  border-color: transparent;
-  padding-bottom: 0;
-}
+.modal__processo li:last-child { border-color: transparent; padding-bottom: 0; }
 .modal__processo li::before {
   content: '';
   position: absolute;
-  left: -0.275rem;
-  top: 0.35rem;
-  width: 0.55rem;
-  height: 0.55rem;
+  left: -0.275rem; top: 0.35rem;
+  width: 0.55rem; height: 0.55rem;
   border-radius: 50%;
   background: var(--clay);
 }
-.modal__processo h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 0.4rem;
-}
-.modal__processo p {
-  margin: 0;
-  font-size: 0.9375rem;
-  color: rgba(26, 41, 66, 0.75);
-}
+.modal__processo h4 { font-size: 1rem; font-weight: 700; margin: 0 0 0.4rem; color: var(--fg); }
+.modal__processo p  { margin: 0; font-size: 0.9375rem; color: var(--fg-muted); }
 
 .modal__resultado {
   font-family: var(--font-display);
@@ -821,35 +795,22 @@ a {
   line-height: 1.6;
   margin: 2.5rem 0;
   padding: 1.5rem;
-  background: var(--cream-dim);
+  background: rgba(197,138,74,0.08);
+  border-left: 3px solid var(--clay);
   border-radius: var(--radius);
+  color: var(--fg);
 }
 
-.modal__gallery {
-  display: grid;
-  gap: 0.75rem;
-  margin: 1rem 0;
-}
-.modal__gallery img {
-  border-radius: var(--radius);
-  width: 100%;
-}
+.modal__gallery { display: grid; gap: 0.75rem; margin: 1rem 0; }
+.modal__gallery img { border-radius: var(--radius); width: 100%; }
 
 .modal__video {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  margin: 1rem 0;
-  border-radius: var(--radius);
-  overflow: hidden;
+  position: relative; width: 100%; aspect-ratio: 16/9;
+  margin: 1rem 0; border-radius: var(--radius); overflow: hidden;
 }
-.modal__video iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
+.modal__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.section--trabalho .tag { background: rgba(197,138,74,0.12); color: var(--clay-light); }
 
 body.modal-open { overflow: hidden; }
 
