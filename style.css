@@ -156,11 +156,12 @@ a {
   line-height: 1.25;
   margin: 0 0 1.5rem;
   letter-spacing: 0.01em;
+  color: var(--fg);
 }
 
 .section__intro {
   max-width: 38em;
-  color: rgba(26, 41, 66, 0.75);
+  color: var(--fg-muted);
   font-size: 1.0625rem;
 }
 
@@ -194,26 +195,26 @@ a {
 .button:hover { transform: translateY(-1px); }
 
 .button--ghost-light {
-  color: var(--cream);
-  border-color: var(--line-on-navy);
+  color: var(--fg);
+  border-color: var(--line-bright);
 }
 .button--ghost-light:hover {
-  background: var(--cream);
-  color: var(--navy);
-  border-color: var(--cream);
+  background: var(--fg);
+  color: var(--bg-deep);
+  border-color: var(--fg);
 }
 
 .button--solid {
   background: var(--clay);
   border-color: var(--clay);
-  color: var(--cream);
+  color: var(--bg-deep);
   font-size: 1rem;
   word-break: break-word;
 }
 .button--solid:hover {
   background: var(--clay-light);
   border-color: var(--clay-light);
-  color: var(--navy);
+  color: var(--bg-deep);
 }
 
 /* =========================================================================
