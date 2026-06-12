@@ -816,3 +816,40 @@ body.modal-open { overflow: hidden; }
   opacity: 1;
   transform: translateY(0);
 }
+
+/* =========================================================================
+   MONÓLITO SCROLL — indicador de progresso lateral
+   ========================================================================= */
+#monolith-scroll {
+  display: none; /* hidden em mobile */
+}
+
+@media (min-width: 760px) {
+  #monolith-scroll {
+    display: block;
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 48px;
+    pointer-events: none;
+  }
+
+  #monolith-scroll svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #monolith-scroll .mono-part {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  #monolith-scroll .mono-part.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
