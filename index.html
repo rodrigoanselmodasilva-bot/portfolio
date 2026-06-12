@@ -15,12 +15,17 @@
 </head>
 <body>
 
+  <!-- ===== LIVING BACKGROUND ===== -->
+  <div id="living-bg" aria-hidden="true">
+    <div class="living-bg__glow" id="bg-glow"></div>
+  </div>
+
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
   <!-- ===== NAV ===== -->
   <header class="nav">
     <a href="#topo" class="nav__brand" aria-label="Rodrigo Anselmo — início">
-      <img src="images/logo.svg" alt="" class="nav__logo" width="36" height="36" />
+      <img src="images/logo-light.png" alt="" class="nav__logo" width="36" height="36" />
       <span class="nav__name">Rodrigo Anselmo</span>
     </a>
     <nav class="nav__links" aria-label="Navegação principal">
@@ -107,7 +112,7 @@
         <!-- preenchido via JS -->
       </div>
 
-      <div class="cases" id="cases-grid">
+      <div class="cases-list" id="cases-grid">
         <!-- preenchido via JS a partir de cases.json -->
       </div>
     </section>
@@ -174,6 +179,27 @@
         <!-- preenchido via JS -->
       </div>
     </div>
+  </div>
+
+  <!-- ===== MONÓLITO SCROLL ===== -->
+  <div id="monolith-scroll" aria-hidden="true">
+    <svg viewBox="400 140 280 800" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path class="mono-part" data-part="arrow"
+        d="M509.576 416.767L454.185 320.826V449.239L539.765 534.82L625.346 449.239V320.826L569.954 416.767V303.114L601.729 248.077L539.765 140.752L477.801 248.077L509.576 303.114V416.767Z"
+        fill="#F2EFE7"/>
+      <path class="mono-part" data-part="base-left"
+        d="M539.793 940V742.214H497.807V814.539C450.575 848.487 405.968 902.116 404 940H539.793Z"
+        fill="#F2EFE7"/>
+      <path class="mono-part" data-part="base-right"
+        d="M539.793 940V742.214H581.779V814.539C629.011 848.487 673.618 902.116 675.586 940H539.793Z"
+        fill="#F2EFE7"/>
+      <path class="mono-part" data-part="figure-left"
+        d="M445.328 653.139C445.824 653.11 446.323 653.094 446.826 653.094C460.904 653.094 472.317 664.482 472.317 678.531C472.317 692.579 460.904 703.967 446.826 703.967C446.323 703.967 445.824 703.951 445.328 703.922V777.286L485.813 736.886L497.809 736.929V801.254H539.793V552.843H521.8L445.328 476.532V653.139ZM493.31 590.249C513.184 590.249 529.297 606.328 529.297 626.161C529.297 645.994 513.184 662.072 493.31 662.072C473.435 662.072 457.323 645.993 457.323 626.161C457.323 606.328 473.435 590.25 493.31 590.249Z"
+        fill="#F2EFE7"/>
+      <path class="mono-part" data-part="figure-right"
+        d="M634.258 653.139C633.762 653.11 633.263 653.094 632.76 653.094C618.682 653.094 607.269 664.482 607.269 678.531C607.269 692.579 618.682 703.967 632.76 703.967C633.263 703.967 633.762 703.951 634.258 703.922V777.286L593.772 736.886L581.777 736.929V801.254H539.793V552.843H557.786L634.258 476.532V653.139ZM586.276 590.249C566.402 590.249 550.289 606.328 550.289 626.161C550.289 645.994 566.401 662.072 586.276 662.072C606.151 662.072 622.263 645.993 622.263 626.161C622.263 606.328 606.151 590.25 586.276 590.249Z"
+        fill="#C58A4A"/>
+    </svg>
   </div>
 
   <script src="cases.js"></script>
