@@ -19,17 +19,17 @@
   --navy:       #071B3A;
   --navy-deep:  #041327;
   --cream:      #F2EFE7;
-  --cream-dim:  #0B2550;
+  --cream-dim:  #0B2550;   /* compat alias → bg-alt */
   --line-on-cream: rgba(242, 239, 231, 0.1);
   --line-on-navy:  rgba(242, 239, 231, 0.18);
 
   /* ── Layout ── */
-  --font-display: 'Cinzel', 'Georgia', serif;
-  --font-body:    'Manrope', -apple-system, sans-serif;
-  --max:    1080px;
-  --gutter: 1.5rem;
-  --radius: 3px;
-  --spine-offset: 0.9rem;
+  --font-display:  'Cinzel', 'Georgia', serif;
+  --font-body:     'Manrope', -apple-system, sans-serif;
+  --max:           1080px;
+  --gutter:        1.5rem;
+  --radius:        3px;
+  --spine-offset:  0.9rem;
 }
 
 /* =========================================================================
