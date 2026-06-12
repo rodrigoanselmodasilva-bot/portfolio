@@ -264,4 +264,71 @@
   /* ---------- Init ---------- */
   renderFiltros();
   renderCasesAsList();
+
+  /* ── Monólito progressivo ── */
+  function initMonolith() {
+    var container = document.getElementById('monolith-scroll');
+    if (!container || window.innerWidth < 760) return;
+
+    var parts = [
+      container.querySelector('[data-part="arrow"]'),
+      container.querySelector('[data-part="base-left"]'),
+      container.querySelector('[data-part="base-right"]'),
+      container.querySelector('[data-part="figure-left"]'),
+      container.querySelector('[data-part="figure-right"]'),
+    ].filter(Boolean);
+
+    if (!parts.length) return;
+
+    var GROUPS = [
+      [parts[0]],           // 0–25%: arrow
+      [parts[1], parts[2]], // 25–50%: bases
+      [parts[3]],           // 50–75%: figure-left
+      [parts[4]],           // 75–100%: figure-right
+    ];
+
+    var revealed = [false, false, false, false];
+
+    function getProgress() {
+      var sobre = document.getElementById('sobre');
+      var footer = document.querySelector('.footer');
+      if (!sobre || !footer) return 0;
+
+      var start = sobre.getBoundingClientRect().top + window.scrollY;
+      var end   = footer.getBoundingClientRect().top + window.scrollY;
+      var range = end - start;
+      if (range <= 0) return 0;
+
+      var progress = (window.scrollY - start) / range;
+      return Math.max(0, Math.min(1, progress));
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var p = getProgress();
+        GROUPS.forEach(function (group, i) {
+          var threshold = i / GROUPS.length;
+          if (!revealed[i] && p >= threshold) {
+            revealed[i] = true;
+            group.forEach(function (el) { el.classList.add('is-revealed'); });
+          }
+        });
+        ticking = false;
+      });
+    }, { passive: true });
+
+    // Check initial state (page may already be scrolled)
+    var p0 = getProgress();
+    GROUPS.forEach(function (group, i) {
+      if (p0 >= i / GROUPS.length) {
+        revealed[i] = true;
+        group.forEach(function (el) { el.classList.add('is-revealed'); });
+      }
+    });
+  }
+
+  initMonolith();
 })();
