@@ -1,4 +1,71 @@
 (function () {
+  /* ── Living Background ── */
+  function initLivingBackground() {
+    var glow = document.getElementById('bg-glow');
+    var bg   = document.getElementById('living-bg');
+    if (!glow || !bg) return;
+
+    // Glow segue o mouse (apenas em desktop)
+    if (window.matchMedia('(pointer: fine)').matches) {
+      window.addEventListener('mousemove', function (e) {
+        glow.style.left = e.clientX + 'px';
+        glow.style.top  = e.clientY + 'px';
+      }, { passive: true });
+    }
+
+    // Nós flutuantes com linhas de conexão
+    var NODES = [
+      [12, 18], [22, 72], [48, 32], [66, 86],
+      [82, 24], [91, 58], [38,  8], [ 8, 48]
+    ];
+    var CONNECTIONS = [[0,1],[2,3],[4,5],[6,7],[1,2],[3,4]];
+
+    var ns  = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+    svg.classList.add('nodes-svg');
+
+    // Linhas de conexão
+    CONNECTIONS.forEach(function (pair) {
+      var n1 = NODES[pair[0]], n2 = NODES[pair[1]];
+      var line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', n1[0]); line.setAttribute('y1', n1[1]);
+      line.setAttribute('x2', n2[0]); line.setAttribute('y2', n2[1]);
+      line.setAttribute('stroke', 'rgba(197,138,74,0.25)');
+      line.setAttribute('stroke-width', '0.15');
+      line.setAttribute('stroke-dasharray', '0.4 1.2');
+      svg.appendChild(line);
+    });
+
+    // Nós com anéis
+    NODES.forEach(function (pos, i) {
+      var g = document.createElementNS(ns, 'g');
+      g.style.animation = 'float-node ' + (4 + i * 0.7) + 's ease-in-out ' + (i * 0.35) + 's infinite';
+
+      var ring = document.createElementNS(ns, 'circle');
+      ring.setAttribute('cx', pos[0]); ring.setAttribute('cy', pos[1]);
+      ring.setAttribute('r', '1.8');
+      ring.setAttribute('stroke', 'rgba(197,138,74,0.3)');
+      ring.setAttribute('stroke-width', '0.2');
+      ring.setAttribute('fill', 'none');
+      ring.style.animation = 'pulse-ring ' + (3.5 + i * 0.5) + 's ease-in-out ' + (i * 0.4) + 's infinite';
+
+      var dot = document.createElementNS(ns, 'circle');
+      dot.setAttribute('cx', pos[0]); dot.setAttribute('cy', pos[1]);
+      dot.setAttribute('r', '0.7');
+      dot.setAttribute('fill', '#C58A4A');
+
+      g.appendChild(ring);
+      g.appendChild(dot);
+      svg.appendChild(g);
+    });
+
+    bg.appendChild(svg);
+  }
+
+  initLivingBackground();
+
   const cases = (window.CASES_DATA && window.CASES_DATA.cases) || [];
 
   // Ordena: destaque primeiro, mantendo a ordem original entre eles
