@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 const SECTIONS = [
   { id: "vision", label: "Vision", num: "I" },
@@ -16,8 +17,11 @@ const SECTIONS = [
  */
 export function MonolithNav() {
   const [active, setActive] = useState(0);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isOnHome = pathname === "/" || pathname === "";
 
   useEffect(() => {
+    if (!isOnHome) return;
     const observers: IntersectionObserver[] = [];
     SECTIONS.forEach((s, i) => {
       const el = document.getElementById(s.id);
@@ -32,7 +36,7 @@ export function MonolithNav() {
       observers.push(obs);
     });
     return () => observers.forEach((o) => o.disconnect());
-  }, []);
+  }, [isOnHome]);
 
   return (
     <nav
@@ -48,8 +52,9 @@ export function MonolithNav() {
           const isActive = i === active;
           return (
             <li key={s.id}>
-              <a
-                href={`#${s.id}`}
+              <Link
+                to="/"
+                hash={s.id}
                 className="group relative flex items-center"
                 aria-current={isActive ? "true" : undefined}
               >
@@ -87,7 +92,7 @@ export function MonolithNav() {
                     {s.label}
                   </span>
                 </span>
-              </a>
+              </Link>
             </li>
           );
         })}

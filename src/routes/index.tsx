@@ -1,9 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { LivingBackground } from "@/components/LivingBackground";
 import { MonolithNav } from "@/components/MonolithNav";
 import { Monolith } from "@/components/Monolith";
+import { cases } from "@/data/cases";
+import type { CaseData } from "@/data/cases";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -741,40 +743,7 @@ function Method() {
 /* Projects — Section IV                                                      */
 /* -------------------------------------------------------------------------- */
 
-const PROJECTS = [
-  {
-    n: "01",
-    title: "Aeon Ledger",
-    sub: "Decentralized archives for cultural institutions.",
-    type: "System Architecture",
-    year: "2024",
-    body: "A living archive that turns institutional memory into queryable infrastructure — designed to outlive the team that built it.",
-  },
-  {
-    n: "02",
-    title: "Vértice",
-    sub: "Strategic intelligence platform for boutique funds.",
-    type: "Product Strategy",
-    year: "2023",
-    body: "Reshaped how a team of fifteen analysts compress thousands of signals into a single weekly decision.",
-  },
-  {
-    n: "03",
-    title: "Mappa Mundi",
-    sub: "Editorial commerce experience for a heritage atelier.",
-    type: "Experience Design",
-    year: "2023",
-    body: "A storefront that reads like a publication. Conversion as a side effect of attention earned.",
-  },
-  {
-    n: "04",
-    title: "Obsidian Studio",
-    sub: "Creative operating system for a multidisciplinary studio.",
-    type: "Operating System",
-    year: "2022",
-    body: "Replaced ten disconnected tools with one structural model. Months of overhead reclaimed; the studio doubled output without growing headcount.",
-  },
-];
+const PROJECTS = cases;
 
 function Projects() {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -814,108 +783,115 @@ function ProjectRow({
   onHover,
   onLeave,
 }: {
-  project: (typeof PROJECTS)[number];
+  project: CaseData;
   index: number;
   isHovered: boolean;
   onHover: () => void;
   onLeave: () => void;
 }) {
   return (
-    <article
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      className="group relative grid grid-cols-[auto_1fr_auto] items-baseline gap-6 py-12 md:gap-12 md:py-16"
+    <Link
+      to="/cases/$slug"
+      params={{ slug: project.slug }}
+      className="block"
+      aria-label={`Ver case: ${project.title}`}
     >
-      {/* hover overlay cartography */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 -z-0"
-        initial={false}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.7 }}
+      <article
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        className="group relative grid grid-cols-[auto_1fr_auto] items-baseline gap-6 py-12 md:gap-12 md:py-16"
       >
-        <svg viewBox="0 0 800 200" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#C58A4A" strokeWidth="0.4" fill="none" opacity="0.5">
-            <motion.line
-              x1="0"
-              y1="100"
-              x2="800"
-              y2="100"
-              strokeDasharray="2 8"
-              animate={{ x1: isHovered ? 0 : 200 }}
-              transition={{ duration: 1 }}
-            />
-            <motion.circle
-              cx="120"
-              cy="100"
-              r="20"
-              strokeDasharray="1 4"
-              animate={{ r: isHovered ? 40 : 0 }}
-              transition={{ duration: 1.2 }}
-            />
-            <motion.circle
-              cx="680"
-              cy="100"
-              r="20"
-              strokeDasharray="1 4"
-              animate={{ r: isHovered ? 40 : 0 }}
-              transition={{ duration: 1.2, delay: 0.1 }}
-            />
-            <motion.line
-              x1="120"
-              y1="100"
-              x2="680"
-              y2="100"
-              animate={{ pathLength: isHovered ? 1 : 0 }}
-              transition={{ duration: 1 }}
-            />
-          </g>
-        </svg>
-      </motion.div>
-
-      <span className="relative font-mono text-xs tracking-[0.3em] text-bronze">
-        {project.n}
-      </span>
-
-      <div className="relative">
-        <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-          <h3 className="heading-display text-4xl transition-colors md:text-6xl">
-            <span
-              className={isHovered ? "text-bronze" : ""}
-              style={{ transition: "color 0.6s ease" }}
-            >
-              {project.title}
-            </span>
-          </h3>
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ivory/50">
-            {project.type} · {project.year}
-          </span>
-        </div>
-        <p className="mt-3 max-w-2xl text-base text-ivory/75 md:text-lg">
-          {project.sub}
-        </p>
-
-        <motion.p
+        {/* hover overlay cartography */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 -z-0"
           initial={false}
-          animate={{
-            height: isHovered ? "auto" : 0,
-            opacity: isHovered ? 1 : 0,
-          }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-          className="mt-0 max-w-2xl overflow-hidden text-sm leading-relaxed text-muted-foreground"
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.7 }}
         >
-          <span className="block pt-6">{project.body}</span>
-        </motion.p>
-      </div>
+          <svg viewBox="0 0 800 200" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
+            <g stroke="#C58A4A" strokeWidth="0.4" fill="none" opacity="0.5">
+              <motion.line
+                x1="0"
+                y1="100"
+                x2="800"
+                y2="100"
+                strokeDasharray="2 8"
+                animate={{ x1: isHovered ? 0 : 200 }}
+                transition={{ duration: 1 }}
+              />
+              <motion.circle
+                cx="120"
+                cy="100"
+                r="20"
+                strokeDasharray="1 4"
+                animate={{ r: isHovered ? 40 : 0 }}
+                transition={{ duration: 1.2 }}
+              />
+              <motion.circle
+                cx="680"
+                cy="100"
+                r="20"
+                strokeDasharray="1 4"
+                animate={{ r: isHovered ? 40 : 0 }}
+                transition={{ duration: 1.2, delay: 0.1 }}
+              />
+              <motion.line
+                x1="120"
+                y1="100"
+                x2="680"
+                y2="100"
+                animate={{ pathLength: isHovered ? 1 : 0 }}
+                transition={{ duration: 1 }}
+              />
+            </g>
+          </svg>
+        </motion.div>
 
-      <div className="relative">
-        <motion.span
-          className="block h-px bg-bronze"
-          initial={{ width: 24 }}
-          animate={{ width: isHovered ? 64 : 24 }}
-          transition={{ duration: 0.6 }}
-        />
-      </div>
-    </article>
+        <span className="relative font-mono text-xs tracking-[0.3em] text-bronze">
+          {project.n}
+        </span>
+
+        <div className="relative">
+          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
+            <h3 className="heading-display text-4xl transition-colors md:text-6xl">
+              <span
+                className={isHovered ? "text-bronze" : ""}
+                style={{ transition: "color 0.6s ease" }}
+              >
+                {project.title}
+              </span>
+            </h3>
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ivory/50">
+              {project.roles.join(" · ")} · {project.year}
+            </span>
+          </div>
+          <p className="mt-3 max-w-2xl text-base text-ivory/75 md:text-lg">
+            {project.summary}
+          </p>
+
+          <motion.p
+            initial={false}
+            animate={{
+              height: isHovered ? "auto" : 0,
+              opacity: isHovered ? 1 : 0,
+            }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="mt-0 max-w-2xl overflow-hidden text-sm leading-relaxed text-muted-foreground"
+          >
+            <span className="block pt-6">{project.sections[0]?.body}</span>
+          </motion.p>
+        </div>
+
+        <div className="relative">
+          <motion.span
+            className="block h-px bg-bronze"
+            initial={{ width: 24 }}
+            animate={{ width: isHovered ? 64 : 24 }}
+            transition={{ duration: 0.6 }}
+          />
+        </div>
+      </article>
+    </Link>
   );
 }
 
