@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071B3A" />
+    <title>Rodrigo Anselmo — Builder of Digital Legacies</title>
+    <meta name="description" content="Strategist, product thinker and systems architect. Building systems, products and ideas that endure." />
+    <meta property="og:title" content="Rodrigo Anselmo — Builder of Digital Legacies" />
+    <meta property="og:description" content="Strategist, product thinker and systems architect. Building systems, products and ideas that endure." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Rodrigo Anselmo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // GitHub Pages SPA redirect — reads ?p= set by 404.html
+      (function () {
+        var p = new URLSearchParams(window.location.search).get("p");
+        if (p) {
+          history.replaceState(null, "", "/portfolio/" + p);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
