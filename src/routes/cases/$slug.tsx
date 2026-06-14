@@ -4,6 +4,7 @@ import { MonolithNav } from "@/components/MonolithNav";
 import { LivingBackground } from "@/components/LivingBackground";
 import { cases } from "@/data/cases";
 import type { CaseData, CaseSection } from "@/data/cases";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/cases/$slug")({
   loader: ({ params }) => {
@@ -57,7 +58,7 @@ function CaseHero({ case: c }: { case: CaseData }) {
   const coverSrc = `${import.meta.env.BASE_URL}cases/${c.slug}/${c.cover}`;
   return (
     <section
-      className="relative flex h-dvh flex-col items-center justify-end pb-10"
+      className="relative flex min-h-[60vh] flex-col items-center justify-end pb-10 md:min-h-dvh"
       style={{
         backgroundImage: `url(${coverSrc})`,
         backgroundSize: "cover",
@@ -91,7 +92,7 @@ function CaseHero({ case: c }: { case: CaseData }) {
           Case {c.n}&nbsp;&nbsp;·&nbsp;&nbsp;
           {c.roles.join(" · ")}
         </p>
-        <h1 className="heading-display text-5xl md:text-7xl lg:text-8xl">
+        <h1 className="heading-display text-3xl md:text-7xl lg:text-8xl">
           {c.title}
         </h1>
       </div>
@@ -113,11 +114,11 @@ function CaseMetadata({ case: c }: { case: CaseData }) {
         style={{ maxWidth: "clamp(540px, 60vw, 860px)", margin: "0 auto" }}
         className="px-6 md:px-0"
       >
-        <dl className="flex divide-x divide-bronze/20">
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-5 md:flex md:divide-x md:divide-bronze/20">
           {items.map(({ label, value }) => (
             <div
               key={label}
-              className="flex-1 px-5 text-center first:pl-0 last:pr-0"
+              className="md:flex-1 md:px-5 md:text-center md:first:pl-0 md:last:pr-0"
             >
               <dt className="label-eyebrow mb-1">{label}</dt>
               <dd className="font-sans text-xs text-ivory">{value}</dd>
@@ -168,15 +169,20 @@ function CaseSectionBlock({
 }
 
 function CaseSectionImage({ src, alt }: { src: string; alt: string }) {
+  const isMobile = useIsMobile();
   return (
     <div
-      className="relative my-12 border-b border-t border-bronze/10"
-      style={{ marginLeft: "calc(clamp(540px, 60vw, 860px) / -2 + 50%)", width: "100vw" }}
+      className="relative my-10 border-b border-t border-bronze/10 md:my-12"
+      style={
+        isMobile
+          ? { marginLeft: "-1.25rem", marginRight: "-1.25rem" }
+          : { marginLeft: "calc(clamp(540px, 60vw, 860px) / -2 + 50%)", width: "100vw" }
+      }
     >
       <img
         src={src}
         alt={alt}
-        className="h-[480px] w-full object-cover"
+        className="h-[240px] w-full object-cover md:h-[480px]"
         loading="lazy"
       />
     </div>
@@ -196,10 +202,48 @@ function CaseFooter({
 
   return (
     <div
-      className="border-t border-bronze/20 py-16"
+      className="border-t border-bronze/20 px-5 pb-28 pt-12 md:px-0 md:pb-16"
       style={{ maxWidth: "clamp(540px, 60vw, 860px)", margin: "0 auto" }}
     >
-      <div className="flex items-center justify-between px-6 md:px-0">
+      {/* Mobile: stacked vertical */}
+      <div className="flex flex-col gap-3 md:hidden">
+        {prev && (
+          <Link
+            to="/cases/$slug"
+            params={{ slug: prev.slug }}
+            className="group flex min-h-[56px] items-center gap-4 rounded-sm border border-bronze/20 px-4 py-3 transition-colors hover:border-bronze/50"
+          >
+            <span className="label-eyebrow opacity-60">←</span>
+            <div>
+              <span className="label-eyebrow block opacity-60">Anterior</span>
+              <span className="font-display text-lg text-ivory">{prev.title}</span>
+            </div>
+          </Link>
+        )}
+        <Link
+          to="/"
+          hash="projects"
+          className="label-eyebrow flex min-h-[44px] items-center justify-center rounded-sm border border-bronze/10 px-4 py-2 opacity-60 transition-opacity hover:opacity-100"
+        >
+          Arquivo
+        </Link>
+        {next && (
+          <Link
+            to="/cases/$slug"
+            params={{ slug: next.slug }}
+            className="group flex min-h-[56px] items-center justify-end gap-4 rounded-sm border border-bronze/20 px-4 py-3 text-right transition-colors hover:border-bronze/50"
+          >
+            <div>
+              <span className="label-eyebrow block opacity-60">Próximo</span>
+              <span className="font-display text-lg text-ivory">{next.title}</span>
+            </div>
+            <span className="label-eyebrow opacity-60">→</span>
+          </Link>
+        )}
+      </div>
+
+      {/* Desktop: side by side */}
+      <div className="hidden items-center justify-between md:flex">
         {prev ? (
           <Link
             to="/cases/$slug"

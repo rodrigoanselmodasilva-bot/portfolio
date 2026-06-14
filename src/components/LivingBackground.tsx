@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 /**
  * Living background system - 5 layers
@@ -10,9 +11,11 @@ import { useEffect, useState } from "react";
  * Layer 5: ambient light wash
  */
 export function LivingBackground() {
+  const isMobile = useIsMobile();
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
+    if (isMobile) return;
     const onMove = (e: MouseEvent) => {
       setMouse({
         x: e.clientX / window.innerWidth,
@@ -21,7 +24,11 @@ export function LivingBackground() {
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) {
+    return <div className="pointer-events-none fixed inset-0 -z-10 bg-[#071B3A]" />;
+  }
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
