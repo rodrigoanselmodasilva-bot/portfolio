@@ -54,7 +54,7 @@ function CasePage() {
 }
 
 function CaseHero({ case: c }: { case: CaseData }) {
-  const coverSrc = `/cases/${c.slug}/${c.cover}`;
+  const coverSrc = `${import.meta.env.BASE_URL}cases/${c.slug}/${c.cover}`;
   return (
     <section
       className="relative flex h-dvh flex-col items-center justify-end pb-10"
@@ -154,7 +154,10 @@ function CaseSectionBlock({
           <p className="label-eyebrow mt-1">{section.subtitle}</p>
         )}
       </div>
-      <p className="font-display text-lg font-light leading-relaxed text-ivory/65 md:text-xl">
+      <p
+        className="font-display text-lg font-light leading-relaxed text-ivory/65 md:text-xl"
+        style={{ display: "-webkit-box", WebkitLineClamp: 5, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+      >
         {section.body}
       </p>
       {section.image && (
