@@ -6,6 +6,7 @@ import { MonolithNav } from "@/components/MonolithNav";
 import { Monolith } from "@/components/Monolith";
 import { cases } from "@/data/cases";
 import type { CaseData } from "@/data/cases";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,14 +50,88 @@ function Index() {
 
 /* -------------------------------------------------------------------------- */
 /* Top meta line                                                              */
+const HEADER_SECTION_IDS = ["vision", "story", "method", "projects", "legacy", "contact"];
+
+function MonolithGlyph({ active }: { active: number }) {
+  const w = 11;
+  const h = Math.round((w * 800) / 280);
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox="400 140 280 800"
+      preserveAspectRatio="xMidYMid meet"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      shapeRendering="geometricPrecision"
+      style={{ display: "block" }}
+      aria-hidden
+    >
+      <path
+        d="M509.576 416.767L454.185 320.826V449.239L539.765 534.82L625.346 449.239V320.826L569.954 416.767V303.114L601.729 248.077L539.765 140.752L477.801 248.077L509.576 303.114V416.767Z"
+        fill="#F3EFE7"
+        opacity={active >= 0 ? 1 : 0.15}
+        style={{ transition: "opacity 1.2s ease" }}
+      />
+      <path
+        d="M445.328 653.139C445.824 653.11 446.323 653.094 446.826 653.094C460.904 653.094 472.317 664.482 472.317 678.531C472.317 692.579 460.904 703.967 446.826 703.967C446.323 703.967 445.824 703.951 445.328 703.922V777.286L485.813 736.886L497.809 736.929V801.254H539.793V552.843H521.8L445.328 476.532V653.139ZM493.31 590.249C513.184 590.249 529.297 606.328 529.297 626.161C529.297 645.994 513.184 662.072 493.31 662.072C473.435 662.072 457.323 645.993 457.323 626.161C457.323 606.328 473.435 590.25 493.31 590.249Z"
+        fill="#F3EFE7"
+        opacity={active >= 2 ? 1 : 0.15}
+        style={{ transition: "opacity 1.2s ease" }}
+      />
+      <path
+        d="M634.258 653.139C633.762 653.11 633.263 653.094 632.76 653.094C618.682 653.094 607.269 664.482 607.269 678.531C607.269 692.579 618.682 703.967 632.76 703.967C633.263 703.967 633.762 703.951 634.258 703.922V777.286L593.772 736.886L581.777 736.929V801.254H539.793V552.843H557.786L634.258 476.532V653.139ZM586.276 590.249C566.402 590.249 550.289 606.328 550.289 626.161C550.289 645.994 566.401 662.072 586.276 662.072C606.151 662.072 622.263 645.993 622.263 626.161C622.263 606.328 606.151 590.25 586.276 590.249Z"
+        fill="#A66A3F"
+        opacity={active >= 3 ? 1 : 0.15}
+        style={{ transition: "opacity 1.2s ease" }}
+      />
+      <path
+        d="M539.793 940V742.214H497.807V814.539C450.575 848.487 405.968 902.116 404 940H539.793Z"
+        fill="#F3EFE7"
+        opacity={active >= 4 ? 1 : 0.15}
+        style={{ transition: "opacity 1.2s ease" }}
+      />
+      <path
+        d="M539.793 940V742.214H581.779V814.539C629.011 848.487 673.618 902.116 675.586 940H539.793Z"
+        fill="#F3EFE7"
+        opacity={active >= 5 ? 1 : 0.15}
+        style={{ transition: "opacity 1.2s ease" }}
+      />
+    </svg>
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 function TopMeta() {
+  const isMobile = useIsMobile();
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const observers = HEADER_SECTION_IDS.map((id, i) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActive(i); },
+        { rootMargin: "-40% 0px -55% 0px" }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach(o => o?.disconnect());
+  }, [isMobile]);
+
   return (
-    <div className="fixed left-0 right-0 top-0 z-30 flex items-center justify-between px-6 py-5 text-[10px] uppercase tracking-[0.32em] text-ivory/60 md:px-12">
+    <div className="fixed left-0 right-0 top-0 z-30 flex h-12 items-center justify-between px-5 text-[10px] uppercase tracking-[0.32em] text-ivory/60 md:h-auto md:px-12 md:py-5">
       <div className="flex items-center gap-3">
         <span className="h-px w-6 bg-bronze/60" />
         <span>Rodrigo Anselmo</span>
       </div>
+
+      <div className="md:hidden">
+        <MonolithGlyph active={active} />
+      </div>
+
       <div className="hidden items-center gap-6 md:flex">
         <span>Lat 23°33′S · Lon 46°38′W</span>
         <span className="h-px w-6 bg-bronze/60" />
@@ -70,6 +145,7 @@ function TopMeta() {
 /* Hero — Section I — Vision                                                  */
 /* -------------------------------------------------------------------------- */
 function Hero() {
+  const isMobile = useIsMobile();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -82,13 +158,13 @@ function Hero() {
     <section
       id="vision"
       ref={ref}
-      className="relative flex min-h-dvh items-center px-6 pt-32 md:pl-32 md:pr-16"
+      className="relative flex min-h-dvh items-center px-5 pt-20 md:pl-32 md:pr-16 md:pt-32"
     >
-      {/* large cartography svg behind */}
+      {/* large cartography svg behind — desktop only */}
       <CartographyHero />
 
       <motion.div
-        style={{ y, opacity }}
+        style={isMobile ? {} : { y, opacity }}
         className="relative z-10 mx-auto w-full max-w-5xl"
       >
         <div className="mb-10 flex items-center gap-4 label-eyebrow">
@@ -127,10 +203,10 @@ function Hero() {
           of strategy, narrative, and design.
         </p>
 
-        <div className="mt-14 flex items-center gap-6">
+        <div className="mt-10 flex w-full items-center gap-6 md:mt-14 md:w-auto">
           <a
             href="#story"
-            className="group inline-flex items-center gap-4 text-xs uppercase tracking-[0.28em] text-ivory"
+            className="group inline-flex w-full items-center justify-center gap-4 text-xs uppercase tracking-[0.28em] text-ivory md:w-auto md:justify-start"
           >
             <span className="grid h-12 w-12 place-items-center rounded-full border border-ivory/30 transition-colors group-hover:border-bronze">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -156,7 +232,7 @@ function Hero() {
 function CartographyHero() {
   return (
     <svg
-      className="absolute inset-0 h-full w-full opacity-[0.5]"
+      className="absolute inset-0 hidden h-full w-full opacity-[0.5] md:block"
       viewBox="0 0 1400 900"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden
@@ -337,10 +413,10 @@ function Story() {
     <section
       id="story"
       ref={sectionRef}
-      className="relative px-6 md:pl-32 md:pr-16"
+      className="relative px-5 md:pl-32 md:pr-16"
     >
       {/* MOBILE: stacked, scroll-revealed cards */}
-      <div className="py-24 md:hidden">
+      <div className="py-20 md:hidden">
         <SectionHeader
           eyebrow="Cap. II — Story"
           title="A cartography of accumulated disciplines."
@@ -576,6 +652,60 @@ const METHOD = [
   { id: "scale", label: "Scale", x: 94, y: 72, body: "Build the structure that lets the system grow without losing its shape." },
 ];
 
+function MobileMethodAccordion() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  return (
+    <div className="mt-10 flex flex-col gap-1">
+      {METHOD.map((n, i) => {
+        const isOpen = openIndex === i;
+        return (
+          <div
+            key={n.id}
+            className={`rounded-sm border transition-colors duration-300 ${
+              isOpen ? "border-bronze/50" : "border-bronze/20"
+            }`}
+          >
+            <button
+              type="button"
+              aria-expanded={isOpen}
+              aria-controls={`method-body-${n.id}`}
+              onClick={() => setOpenIndex(isOpen ? null : i)}
+              className="flex min-h-[48px] w-full items-center justify-between gap-4 px-4 py-3 text-left"
+            >
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[10px] tracking-[0.25em] text-bronze">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="font-display text-lg text-ivory">{n.label}</span>
+              </div>
+              <motion.span
+                animate={{ rotate: isOpen ? 45 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-shrink-0 text-bronze"
+                aria-hidden
+              >
+                +
+              </motion.span>
+            </button>
+            <motion.div
+              id={`method-body-${n.id}`}
+              initial={false}
+              animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              style={{ overflow: "hidden" }}
+            >
+              <p className="border-t border-bronze/15 px-4 pb-4 pt-3 text-sm leading-relaxed text-muted-foreground">
+                {n.body}
+              </p>
+            </motion.div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Method() {
   const [hovered, setHovered] = useState<number | null>(null);
   const active = hovered;
@@ -583,7 +713,7 @@ function Method() {
   return (
     <section
       id="method"
-      className="relative px-6 py-32 md:pl-32 md:pr-16 md:py-48"
+      className="relative px-5 py-20 md:py-48 md:pl-32 md:pr-16"
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeader
@@ -591,8 +721,13 @@ function Method() {
           title="Not a process. A system of consequences."
         />
 
-        <div className="mt-20">
-          {/* strategic map */}
+        {/* MOBILE: accordion */}
+        <div className="md:hidden">
+          <MobileMethodAccordion />
+        </div>
+
+        {/* DESKTOP: strategic map */}
+        <div className="mt-20 hidden md:block">
           <div className="relative h-[520px] w-full rounded-sm border border-bronze/20 bg-navy-secondary/30 p-6">
             {/* corner brackets */}
             {[
@@ -745,13 +880,37 @@ function Method() {
 
 const PROJECTS = cases;
 
+function ProjectMobileCard({ project }: { project: CaseData }) {
+  return (
+    <Link
+      to="/cases/$slug"
+      params={{ slug: project.slug }}
+      aria-label={`Ver case: ${project.title}`}
+      className="flex items-center gap-4 border-b border-ivory/10 py-5 last:border-b-0"
+    >
+      <div className="min-w-0 flex-1">
+        <span className="font-mono text-[9px] tracking-[0.25em] text-bronze">{project.n}</span>
+        <h3 className="mt-0.5 font-display text-lg leading-tight text-ivory">
+          {project.title}
+        </h3>
+        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+          {project.summary}
+        </p>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0 text-bronze/60" aria-hidden>
+        <path d="M3 7H11M8 4L11 7L8 10" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
+  );
+}
+
 function Projects() {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <section
       id="projects"
-      className="relative px-6 py-32 md:pl-32 md:pr-16 md:py-48"
+      className="relative px-5 py-20 md:py-48 md:pl-32 md:pr-16"
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeader
@@ -759,7 +918,15 @@ function Projects() {
           title="Artifacts, not portfolio entries."
         />
 
-        <div className="mt-16 divide-y divide-ivory/10 border-y border-ivory/10">
+        {/* MOBILE: stacked cards */}
+        <div className="mt-10 border-t border-ivory/10 md:hidden">
+          {PROJECTS.map((p) => (
+            <ProjectMobileCard key={p.n} project={p} />
+          ))}
+        </div>
+
+        {/* DESKTOP: row layout */}
+        <div className="mt-16 hidden divide-y divide-ivory/10 border-y border-ivory/10 md:block">
           {PROJECTS.map((p, i) => (
             <ProjectRow
               key={p.n}
@@ -914,18 +1081,18 @@ function Manifesto() {
   return (
     <section
       id="legacy"
-      className="relative px-6 py-32 md:pl-32 md:pr-16 md:py-56"
+      className="relative px-5 py-20 md:py-56 md:pl-32 md:pr-16"
     >
       <div className="absolute inset-0 -z-10 bg-navy-deep" />
       <div className="absolute inset-0 -z-10 bg-grain opacity-100" />
 
       <div className="mx-auto max-w-5xl">
-        <div className="label-eyebrow mb-16 flex items-center gap-4">
+        <div className="label-eyebrow mb-10 flex items-center gap-4 md:mb-16">
           <span className="h-px w-10 bg-bronze" />
           <span>Cap. V — Manifesto</span>
         </div>
 
-        <ol className="space-y-32">
+        <ol className="space-y-16 md:space-y-32">
           {MANIFESTO.map((line, i) => (
             <motion.li
               key={i}
@@ -966,11 +1133,11 @@ function Final() {
   return (
     <section
       id="contact"
-      className="relative px-6 py-32 md:pl-32 md:pr-16 md:py-48"
+      className="relative px-5 py-20 md:py-48 md:pl-32 md:pr-16"
     >
       <div className="mx-auto grid max-w-6xl gap-16 md:grid-cols-[1fr_auto] md:items-end">
         <div>
-          <div className="label-eyebrow mb-10 flex items-center gap-4">
+          <div className="label-eyebrow mb-8 flex items-center gap-4 md:mb-10">
             <span className="h-px w-10 bg-bronze" />
             <span>Cap. VI — Convergence</span>
           </div>
@@ -982,15 +1149,15 @@ function Final() {
             <span className="text-bronze">remembering</span>.
           </h2>
 
-          <p className="mt-10 max-w-xl text-lg text-muted-foreground">
+          <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground md:mt-10 md:text-lg">
             For collaborations, advisory work, and long-arc projects where the
             outcome matters more than the cycle.
           </p>
 
-          <div className="mt-14 flex flex-col items-start gap-6">
+          <div className="mt-10 flex flex-col items-stretch gap-6 md:mt-14 md:items-start">
             <a
               href="mailto:rodrigo@anselmo.studio"
-              className="group inline-flex items-center gap-5 border border-bronze px-8 py-5 text-xs uppercase tracking-[0.3em] text-ivory transition-colors hover:bg-bronze hover:text-navy-deep"
+              className="group inline-flex w-full items-center justify-center gap-5 border border-bronze px-8 py-5 text-xs uppercase tracking-[0.3em] text-ivory transition-colors hover:bg-bronze hover:text-navy-deep md:w-auto md:justify-start"
             >
               <span>Start a conversation</span>
               <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
@@ -1036,10 +1203,10 @@ function Final() {
 
 function Footer() {
   return (
-    <footer className="relative border-t border-ivory/10 px-6 py-10 md:pl-32 md:pr-16">
-      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 text-[10px] uppercase tracking-[0.3em] text-ivory/45 md:flex-row md:items-center">
+    <footer className="relative border-t border-ivory/10 px-5 pb-28 pt-10 md:pb-10 md:pl-32 md:pr-16">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center text-[10px] uppercase tracking-[0.3em] text-ivory/45 md:flex-row md:items-center md:text-left">
         <span>© MMXXVI · Rodrigo Anselmo</span>
-        <span className="font-mono">
+        <span className="hidden font-mono md:block">
           Lat 23°33′44″S · Lon 46°38′20″W · São Paulo
         </span>
         <span>Archive · v.1</span>
