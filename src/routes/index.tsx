@@ -878,7 +878,12 @@ function ProjectRow({
             transition={{ duration: 0.6, ease: "easeInOut" }}
             className="mt-0 max-w-2xl overflow-hidden text-sm leading-relaxed text-muted-foreground"
           >
-            <span className="block pt-6">{project.sections[0]?.body}</span>
+            <span
+              className="block pt-6"
+              style={{ display: "-webkit-box", WebkitLineClamp: 5, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+            >
+              {project.sections[0]?.body}
+            </span>
           </motion.p>
         </div>
 

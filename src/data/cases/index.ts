@@ -1,8 +1,13 @@
 export type { CaseData, CaseSection } from "./types";
 
-import aeonLedger from "./aeon-ledger";
-import vertice from "./vertice";
-import mappaMundi from "./mappa-mundi";
-import obsidianStudio from "./obsidian-studio";
+import georgiapro from "./georgiapro";
+import plataformaDeLicitacoes from "./sabesp-licitacoes";
+import aionSolution from "./aion-solution";
+import sebrae from "./sebrae";
 
-export const cases = [aeonLedger, vertice, mappaMundi, obsidianStudio];
+export const cases = [
+  georgiapro,
+  plataformaDeLicitacoes,
+  aionSolution,
+  sebrae,
+];
