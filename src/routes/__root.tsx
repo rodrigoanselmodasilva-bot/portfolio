@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { MobileNav } from "../components/MobileNav";
 
 function NotFoundComponent() {
   return (
@@ -80,6 +81,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <MobileNav />
     </QueryClientProvider>
   );
 }

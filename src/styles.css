@@ -167,6 +167,20 @@
   z-index: 0;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--bronze);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 @keyframes drift {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(0, -8px, 0); }
