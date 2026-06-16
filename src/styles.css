@@ -184,3 +184,74 @@
   90% { opacity: 0.6; }
   100% { transform: translate(var(--dx, 40px), var(--dy, -120px)); opacity: 0; }
 }
+
+/* Hero — Aparição photo treatment */
+.hero-photo {
+  background-image: url('/rodrigo.jpg');
+  background-repeat: no-repeat;
+  /* mobile: 44% centers the face in the right half; brighter for screen blend */
+  background-size: cover;
+  background-position: 44% 22%;
+  mix-blend-mode: screen;
+  filter: contrast(1.08) brightness(1.14);
+}
+
+@media (min-width: 768px) {
+  .hero-photo {
+    background-size: 150% auto;
+    background-position: 10% 26%;
+    filter: contrast(1.06) brightness(1.05);
+  }
+}
+
+/* Horizontal veil — protects text side */
+.hero-veil-h {
+  /* mobile: light diagonal — photo stays visible on the right */
+  background: linear-gradient(
+    108deg,
+    #071B3A 18%,
+    rgba(7, 27, 58, 0.62) 50%,
+    rgba(7, 27, 58, 0.10) 100%
+  );
+}
+
+@media (min-width: 768px) {
+  /* desktop: text occupies left ~50%; hold opaque, then long smooth fade */
+  .hero-veil-h {
+    background: linear-gradient(
+      96deg,
+      #071B3A 0%,
+      #071B3A 36%,
+      rgba(7, 27, 58, 0.90) 50%,
+      rgba(7, 27, 58, 0.42) 68%,
+      rgba(7, 27, 58, 0.0) 86%
+    );
+  }
+}
+
+/* Vertical veil — soft top fade hides hairline, seals the bottom */
+.hero-veil-v {
+  background: linear-gradient(
+    to bottom,
+    #071B3A 0%,
+    rgba(7, 27, 58, 0.70) 10%,
+    transparent 26%,
+    transparent 60%,
+    rgba(7, 27, 58, 0.92) 86%,
+    #071B3A 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-veil-v {
+    background: linear-gradient(
+      to bottom,
+      #071B3A 0%,
+      rgba(7, 27, 58, 0.90) 10%,
+      rgba(7, 27, 58, 0.52) 26%,
+      transparent 38%,
+      transparent 75%,
+      rgba(7, 27, 58, 0.85) 100%
+    );
+  }
+}

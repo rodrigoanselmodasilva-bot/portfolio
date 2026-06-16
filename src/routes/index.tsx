@@ -82,10 +82,25 @@ function Hero() {
     <section
       id="vision"
       ref={ref}
-      className="relative flex min-h-dvh items-center px-6 pt-32 md:pl-32 md:pr-16"
+      className="relative isolate flex min-h-dvh items-center overflow-hidden px-6 pt-32 md:pl-32 md:pr-16"
     >
-      {/* large cartography svg behind */}
-      <CartographyHero />
+      {/* Photo layer — mix-blend-mode:screen dissolves the black into navy */}
+      <div
+        role="img"
+        aria-label="Rodrigo Anselmo trabalhando no notebook"
+        className="hero-photo pointer-events-none absolute inset-0 z-[1]"
+      />
+
+      {/* Horizontal veil — protects text side, opens toward photo */}
+      <div className="hero-veil-h pointer-events-none absolute inset-0 z-[2]" />
+
+      {/* Vertical veil — fades top chrome and seals the bottom */}
+      <div className="hero-veil-v pointer-events-none absolute inset-0 z-[2]" />
+
+      {/* Cartography SVG — above photo/veils, below text */}
+      <div className="pointer-events-none absolute inset-0 z-[3]">
+        <CartographyHero />
+      </div>
 
       <motion.div
         style={{ y, opacity }}
@@ -96,7 +111,7 @@ function Hero() {
           <span>Cap. I — Vision</span>
         </div>
 
-        <h1 className="heading-display text-[clamp(2.6rem,7vw,6.5rem)] text-balance">
+        <h1 className="heading-display text-[clamp(3rem,7vw,6.5rem)] text-balance">
           Some stories deserve
           <br />
           <span className="italic text-ivory/80">to become </span>
@@ -119,7 +134,6 @@ function Hero() {
               />
             </svg>
           </span>
-          .
         </h1>
 
         <p className="mt-10 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -148,7 +162,7 @@ function Hero() {
       </motion.div>
 
       {/* corner crosshair */}
-      <Crosshair className="absolute right-8 top-32 hidden md:block" />
+      <Crosshair className="absolute right-8 top-32 z-10 hidden md:block" />
     </section>
   );
 }
