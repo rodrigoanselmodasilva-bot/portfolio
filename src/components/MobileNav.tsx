@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLocale } from "@/i18n/context";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 type ActiveSection = "home" | "work" | "contact";
 
@@ -77,7 +79,12 @@ function useSectionObserver(): ActiveSection {
 export function MobileNav() {
   const isMobile = useIsMobile();
   const location = useLocation();
-  const isHomePage = location.pathname === "/" || location.pathname === "/portfolio/";
+  const locale = useLocale();
+  const isHomePage =
+    location.pathname === `/${locale}/` ||
+    location.pathname === `/${locale}` ||
+    location.pathname === "/" ||
+    location.pathname === "/portfolio/";
   const active = useSectionObserver();
 
   if (!isMobile) return null;
@@ -92,6 +99,11 @@ export function MobileNav() {
       className="fixed left-1/2 z-50 -translate-x-1/2"
       style={{ bottom: "calc(20px + env(safe-area-inset-bottom))" }}
     >
+      {/* language switcher — appears above the pill */}
+      <div className="mb-1 flex justify-center">
+        <LanguageSwitcher />
+      </div>
+
       <div
         className="flex items-center gap-1 rounded-full border px-3 py-1"
         style={{
@@ -144,7 +156,8 @@ export function MobileNav() {
         ) : (
           <>
             <Link
-              to="/"
+              to="/$lang/"
+              params={{ lang: locale }}
               aria-label="Ir para início"
               className="flex min-h-[36px] min-w-[44px] items-center justify-center"
             >
@@ -154,8 +167,9 @@ export function MobileNav() {
             {divider}
 
             <Link
-              to="/"
+              to="/$lang/"
               hash="projects"
+              params={{ lang: locale }}
               aria-label="Ver projetos"
               className="flex min-h-[36px] min-w-[44px] items-center justify-center"
             >
@@ -165,8 +179,9 @@ export function MobileNav() {
             {divider}
 
             <Link
-              to="/"
+              to="/$lang/"
               hash="contact"
+              params={{ lang: locale }}
               aria-label="Entrar em contato"
               className="flex min-h-[36px] min-w-[44px] items-center justify-center"
             >
