@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocale } from "@/i18n/context";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 type ActiveSection = "home" | "work" | "contact";
 
@@ -98,6 +99,11 @@ export function MobileNav() {
       className="fixed left-1/2 z-50 -translate-x-1/2"
       style={{ bottom: "calc(20px + env(safe-area-inset-bottom))" }}
     >
+      {/* language switcher — appears above the pill */}
+      <div className="mb-1 flex justify-center">
+        <LanguageSwitcher />
+      </div>
+
       <div
         className="flex items-center gap-1 rounded-full border px-3 py-1"
         style={{

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useI18n, useLocale } from "@/i18n/context";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 /**
  * Vertical monolith navigation. The symbol assembles itself as the user
@@ -96,6 +97,11 @@ export function MonolithNav() {
           );
         })}
       </ol>
+
+      {/* language switcher */}
+      <div className="absolute bottom-28 left-1/2 -translate-x-1/2">
+        <LanguageSwitcher />
+      </div>
 
       {/* bottom monolith glyph — constructs itself, matches brand SVG */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
