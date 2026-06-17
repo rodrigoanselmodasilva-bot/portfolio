@@ -6,7 +6,8 @@ import { cases, localizeCase } from "@/data/cases";
 import type { CaseData, CaseSection } from "@/data/cases";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useI18n, useLocale } from "@/i18n/context";
-import { isLocale } from "@/i18n/config";
+import { isLocale, OG_LOCALES, SITE_ORIGIN } from "@/i18n/config";
+import type { Locale } from "@/i18n/config";
 
 export const Route = createFileRoute("/$lang/cases/$slug")({
   loader: ({ params }) => {
@@ -14,12 +15,30 @@ export const Route = createFileRoute("/$lang/cases/$slug")({
     if (!c) throw notFound();
     return localizeCase(c, isLocale(params.lang) ? params.lang : "pt");
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData.title} — Rodrigo Anselmo` },
-      { name: "description", content: loaderData.summary },
-    ],
-  }),
+  head: ({ loaderData, params }) => {
+    const locale = isLocale(params.lang) ? (params.lang as Locale) : "pt";
+    const base = `${SITE_ORIGIN}/portfolio`;
+    const slug = params.slug;
+    if (!loaderData) return { meta: [], links: [] };
+    return {
+      meta: [
+        { title: `${loaderData.title} — Rodrigo Anselmo` },
+        { name: "description", content: loaderData.summary },
+        { property: "og:title", content: `${loaderData.title} — Rodrigo Anselmo` },
+        { property: "og:description", content: loaderData.summary },
+        { property: "og:locale", content: OG_LOCALES[locale] },
+        { property: "og:url", content: `${base}/${locale}/cases/${slug}` },
+        { property: "og:type", content: "article" },
+      ],
+      links: [
+        { rel: "canonical", href: `${base}/${locale}/cases/${slug}` },
+        { rel: "alternate", hreflang: "pt-BR", href: `${base}/pt/cases/${slug}` },
+        { rel: "alternate", hreflang: "en", href: `${base}/en/cases/${slug}` },
+        { rel: "alternate", hreflang: "es", href: `${base}/es/cases/${slug}` },
+        { rel: "alternate", hreflang: "x-default", href: `${base}/pt/cases/${slug}` },
+      ],
+    };
+  },
   component: CasePage,
   notFoundComponent: () => (
     <div className="flex h-dvh items-center justify-center text-ivory/50">

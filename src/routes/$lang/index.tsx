@@ -8,26 +8,34 @@ import { cases, localizeCase } from "@/data/cases";
 import type { CaseData } from "@/data/cases";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useI18n, useLocale } from "@/i18n/context";
+import { isLocale, OG_LOCALES, SITE_ORIGIN } from "@/i18n/config";
+import type { Locale } from "@/i18n/config";
+import { dictionaries } from "@/i18n/dictionaries";
 
 export const Route = createFileRoute("/$lang/")({
-  head: () => ({
-    meta: [
-      // TODO: Phase 4 — use locale-aware dictionary for head() meta
-      { title: "Rodrigo Anselmo — Estrategista de Produto & Design" },
-      {
-        name: "description",
-        content:
-          "Estrategista de produto e design. Construo sistemas, produtos e ideias na interseção entre estratégia, narrativa e design.",
-      },
-      { property: "og:title", content: "Rodrigo Anselmo — Estrategista de Produto & Design" },
-      {
-        property: "og:description",
-        content:
-          "Estrategista de produto e design. Construo sistemas, produtos e ideias na interseção entre estratégia, narrativa e design.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: ({ params }) => {
+    const locale = isLocale(params.lang) ? (params.lang as Locale) : "pt";
+    const dict = dictionaries[locale];
+    const base = `${SITE_ORIGIN}/portfolio`;
+    return {
+      meta: [
+        { title: dict.meta.title },
+        { name: "description", content: dict.meta.description },
+        { property: "og:title", content: dict.meta.title },
+        { property: "og:description", content: dict.meta.description },
+        { property: "og:locale", content: OG_LOCALES[locale] },
+        { property: "og:url", content: `${base}/${locale}/` },
+        { property: "og:type", content: "website" },
+      ],
+      links: [
+        { rel: "canonical", href: `${base}/${locale}/` },
+        { rel: "alternate", hreflang: "pt-BR", href: `${base}/pt/` },
+        { rel: "alternate", hreflang: "en", href: `${base}/en/` },
+        { rel: "alternate", hreflang: "es", href: `${base}/es/` },
+        { rel: "alternate", hreflang: "x-default", href: `${base}/pt/` },
+      ],
+    };
+  },
   component: Index,
 });
 
