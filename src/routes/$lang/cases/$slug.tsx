@@ -2,15 +2,15 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { MonolithNav } from "@/components/MonolithNav";
 import { LivingBackground } from "@/components/LivingBackground";
-import { cases } from "@/data/cases";
+import { cases, localizeCase } from "@/data/cases";
 import type { CaseData, CaseSection } from "@/data/cases";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export const Route = createFileRoute("/cases/$slug")({
+export const Route = createFileRoute("/$lang/cases/$slug")({
   loader: ({ params }) => {
     const c = cases.find((c) => c.slug === params.slug);
     if (!c) throw notFound();
-    return c;
+    return localizeCase(c, "pt"); // Phase 4 will make this locale-aware
   },
   head: ({ loaderData }) => ({
     meta: [
@@ -48,7 +48,7 @@ function CasePage() {
             <CaseSectionBlock key={i} section={section} slug={c.slug} />
           ))}
         </div>
-        <CaseFooter cases={cases} current={c} />
+        <CaseFooter cases={cases.map(x => localizeCase(x, "pt"))} current={c} />
       </main>
     </div>
   );
@@ -79,7 +79,7 @@ function CaseHero({ case: c }: { case: CaseData }) {
 
       {/* back link */}
       <Link
-        to="/"
+        to="/$lang"
         hash="projects"
         className="label-eyebrow absolute right-8 top-8 z-10 opacity-60 transition-opacity hover:opacity-100"
       >
@@ -209,7 +209,7 @@ function CaseFooter({
       <div className="flex flex-col gap-3 md:hidden">
         {prev && (
           <Link
-            to="/cases/$slug"
+            to="/$lang/cases/$slug"
             params={{ slug: prev.slug }}
             className="group flex min-h-[56px] items-center gap-4 rounded-sm border border-bronze/20 px-4 py-3 transition-colors hover:border-bronze/50"
           >
@@ -221,7 +221,7 @@ function CaseFooter({
           </Link>
         )}
         <Link
-          to="/"
+          to="/$lang"
           hash="projects"
           className="label-eyebrow flex min-h-[44px] items-center justify-center rounded-sm border border-bronze/10 px-4 py-2 opacity-60 transition-opacity hover:opacity-100"
         >
@@ -229,7 +229,7 @@ function CaseFooter({
         </Link>
         {next && (
           <Link
-            to="/cases/$slug"
+            to="/$lang/cases/$slug"
             params={{ slug: next.slug }}
             className="group flex min-h-[56px] items-center justify-end gap-4 rounded-sm border border-bronze/20 px-4 py-3 text-right transition-colors hover:border-bronze/50"
           >
@@ -246,7 +246,7 @@ function CaseFooter({
       <div className="hidden items-center justify-between md:flex">
         {prev ? (
           <Link
-            to="/cases/$slug"
+            to="/$lang/cases/$slug"
             params={{ slug: prev.slug }}
             className="group flex flex-col"
           >
@@ -259,7 +259,7 @@ function CaseFooter({
           <span />
         )}
         <Link
-          to="/"
+          to="/$lang"
           hash="projects"
           className="label-eyebrow opacity-60 transition-opacity hover:opacity-100"
         >
@@ -267,7 +267,7 @@ function CaseFooter({
         </Link>
         {next ? (
           <Link
-            to="/cases/$slug"
+            to="/$lang/cases/$slug"
             params={{ slug: next.slug }}
             className="group flex flex-col items-end"
           >

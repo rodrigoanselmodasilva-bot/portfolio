@@ -9,48 +9,72 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LangRouteRouteImport } from './routes/$lang/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CasesSlugRouteImport } from './routes/cases/$slug'
+import { Route as LangIndexRouteImport } from './routes/$lang/index'
+import { Route as LangCasesSlugRouteImport } from './routes/$lang/cases/$slug'
 
+const LangRouteRoute = LangRouteRouteImport.update({
+  id: '/$lang',
+  path: '/$lang',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CasesSlugRoute = CasesSlugRouteImport.update({
+const LangIndexRoute = LangIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LangRouteRoute,
+} as any)
+const LangCasesSlugRoute = LangCasesSlugRouteImport.update({
   id: '/cases/$slug',
   path: '/cases/$slug',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LangRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cases/$slug': typeof CasesSlugRoute
+  '/$lang': typeof LangRouteRouteWithChildren
+  '/$lang/': typeof LangIndexRoute
+  '/$lang/cases/$slug': typeof LangCasesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cases/$slug': typeof CasesSlugRoute
+  '/$lang': typeof LangIndexRoute
+  '/$lang/cases/$slug': typeof LangCasesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/cases/$slug': typeof CasesSlugRoute
+  '/$lang': typeof LangRouteRouteWithChildren
+  '/$lang/': typeof LangIndexRoute
+  '/$lang/cases/$slug': typeof LangCasesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cases/$slug'
+  fullPaths: '/' | '/$lang' | '/$lang/' | '/$lang/cases/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cases/$slug'
-  id: '__root__' | '/' | '/cases/$slug'
+  to: '/' | '/$lang' | '/$lang/cases/$slug'
+  id: '__root__' | '/' | '/$lang' | '/$lang/' | '/$lang/cases/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CasesSlugRoute: typeof CasesSlugRoute
+  LangRouteRoute: typeof LangRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/$lang': {
+      id: '/$lang'
+      path: '/$lang'
+      fullPath: '/$lang'
+      preLoaderRoute: typeof LangRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -58,19 +82,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cases/$slug': {
-      id: '/cases/$slug'
+    '/$lang/': {
+      id: '/$lang/'
+      path: '/'
+      fullPath: '/$lang/'
+      preLoaderRoute: typeof LangIndexRouteImport
+      parentRoute: typeof LangRouteRoute
+    }
+    '/$lang/cases/$slug': {
+      id: '/$lang/cases/$slug'
       path: '/cases/$slug'
-      fullPath: '/cases/$slug'
-      preLoaderRoute: typeof CasesSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/$lang/cases/$slug'
+      preLoaderRoute: typeof LangCasesSlugRouteImport
+      parentRoute: typeof LangRouteRoute
     }
   }
 }
 
+interface LangRouteRouteChildren {
+  LangIndexRoute: typeof LangIndexRoute
+  LangCasesSlugRoute: typeof LangCasesSlugRoute
+}
+
+const LangRouteRouteChildren: LangRouteRouteChildren = {
+  LangIndexRoute: LangIndexRoute,
+  LangCasesSlugRoute: LangCasesSlugRoute,
+}
+
+const LangRouteRouteWithChildren = LangRouteRoute._addFileChildren(
+  LangRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CasesSlugRoute: CasesSlugRoute,
+  LangRouteRoute: LangRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
