@@ -2,11 +2,8 @@ import type { Dictionary } from "../types";
 
 const en: Dictionary = {
   meta: {
-    homeTitle: "Rodrigo Anselmo — Product & Design Strategist",
-    homeDescription:
-      "Product and design strategist. Building systems, products and ideas at the intersection of strategy, narrative and design.",
-    ogTitle: "Rodrigo Anselmo — Product & Design Strategist",
-    ogDescription:
+    title: "Rodrigo Anselmo — Product & Design Strategist",
+    description:
       "Product and design strategist. Building systems, products and ideas at the intersection of strategy, narrative and design.",
   },
   topMeta: {

@@ -12,10 +12,8 @@ export interface MethodNode {
 
 export interface Dictionary {
   meta: {
-    homeTitle: string;
-    homeDescription: string;
-    ogTitle: string;
-    ogDescription: string;
+    title: string;
+    description: string;
   };
   topMeta: {
     archive: string; // "Arquivo · MMXXVI" or "Archive · MMXXVI"

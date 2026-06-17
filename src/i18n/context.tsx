@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import type { Dictionary } from "./types";
 import type { Locale } from "./config";
 
@@ -16,7 +16,7 @@ export function I18nProvider({
 }: {
   locale: Locale;
   dictionary: Dictionary;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <I18nContext.Provider value={{ locale, t: dictionary }}>
