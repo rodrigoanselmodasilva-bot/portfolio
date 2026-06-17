@@ -7,7 +7,7 @@ import { Monolith } from "@/components/Monolith";
 import { cases, localizeCase } from "@/data/cases";
 import type { CaseData } from "@/data/cases";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useI18n } from "@/i18n/context";
+import { useI18n, useLocale } from "@/i18n/context";
 
 export const Route = createFileRoute("/$lang/")({
   head: () => ({
@@ -30,9 +30,6 @@ export const Route = createFileRoute("/$lang/")({
   }),
   component: Index,
 });
-
-// Phase 4 will make this locale-aware
-const PROJECTS = cases.map(c => localizeCase(c, "pt"));
 
 function Index() {
   return (
@@ -108,6 +105,7 @@ function MonolithGlyph({ active }: { active: number }) {
 
 /* -------------------------------------------------------------------------- */
 function TopMeta() {
+  const t = useI18n();
   const isMobile = useIsMobile();
   const [active, setActive] = useState(0);
 
@@ -140,7 +138,7 @@ function TopMeta() {
       <div className="hidden items-center gap-6 md:flex">
         <span>Lat 23°33′S · Lon 46°38′W</span>
         <span className="h-px w-6 bg-bronze/60" />
-        <span>Archive · MMXXVI</span>
+        <span>{t.topMeta.archive}</span>
       </div>
     </div>
   );
@@ -150,6 +148,7 @@ function TopMeta() {
 /* Hero — Section I — Vision                                                  */
 /* -------------------------------------------------------------------------- */
 function Hero() {
+  const t = useI18n();
   const isMobile = useIsMobile();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -189,15 +188,15 @@ function Hero() {
       >
         <div className="mb-10 flex items-center gap-4 label-eyebrow">
           <span className="h-px w-10 bg-bronze" />
-          <span>Cap. I — Vision</span>
+          <span>{t.hero.eyebrow}</span>
         </div>
 
         <h1 className="heading-display text-[clamp(3rem,7vw,6.5rem)] text-balance">
-          Some stories deserve
+          {t.hero.title}
           <br />
-          <span className="italic text-ivory/80">to become </span>
+          <span className="italic text-ivory/80">{t.hero.titleItalic} </span>
           <span className="relative inline-block">
-            <span className="text-bronze">legacies.</span>
+            <span className="text-bronze">{t.hero.titleHighlight}</span>
             <svg
               className="absolute -bottom-2 left-0 h-2 w-full"
               viewBox="0 0 200 8"
@@ -218,8 +217,7 @@ function Hero() {
         </h1>
 
         <p className="mt-10 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-          Building systems, products and ideas that endure — at the intersection
-          of strategy, narrative, and design.
+          {t.hero.lead}
         </p>
 
         <div className="mt-10 flex w-full items-center gap-6 md:mt-14 md:w-auto">
@@ -237,7 +235,7 @@ function Hero() {
                 />
               </svg>
             </span>
-            <span>Explore the archive</span>
+            <span>{t.hero.cta}</span>
           </a>
         </div>
       </motion.div>
@@ -379,40 +377,8 @@ function Crosshair({ className = "" }: { className?: string }) {
 /* Story — Section II                                                         */
 /* -------------------------------------------------------------------------- */
 
-const TIMELINE = [
-  {
-    year: "2008",
-    title: "Law",
-    body: "Trained in the discipline of argument and structure. Learned that every system rests on a framework of language.",
-  },
-  {
-    year: "2012",
-    title: "Marketing",
-    body: "Translated abstract value into stories audiences could hold. Found that strategy without narrative collapses on contact.",
-  },
-  {
-    year: "2015",
-    title: "UX",
-    body: "Studied the geometry of behavior. Every click is a sentence; every flow, a paragraph in a longer essay.",
-  },
-  {
-    year: "2018",
-    title: "Product",
-    body: "Built products as living organisms — composed of trade-offs, vision, and discipline measured in shipped iterations.",
-  },
-  {
-    year: "2021",
-    title: "Strategy",
-    body: "Connected business architecture to creative intention. Moved from making things to deciding which things deserve to be made.",
-  },
-  {
-    year: "Today",
-    title: "Digital Legacy",
-    body: "Designing artifacts engineered to outlive the cycles that produced them.",
-  },
-];
-
 function Story() {
+  const t = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
 
@@ -421,10 +387,10 @@ function Story() {
     offset: ["start start", "end end"],
   });
 
-  // Map scroll progress (0→1) to an index across TIMELINE entries (desktop only).
+  // Map scroll progress (0→1) to an index across timeline entries (desktop only).
   useMotionValueEvent(scrollYProgress, "change", (p) => {
     const clamped = Math.min(0.9999, Math.max(0, (p - 0.05) / 0.9));
-    const idx = Math.min(TIMELINE.length - 1, Math.floor(clamped * TIMELINE.length));
+    const idx = Math.min(t.story.timeline.length - 1, Math.floor(clamped * t.story.timeline.length));
     setActive(idx);
   });
 
@@ -437,13 +403,13 @@ function Story() {
       {/* MOBILE: stacked, scroll-revealed cards */}
       <div className="py-20 md:hidden">
         <SectionHeader
-          eyebrow="Cap. II — Story"
-          title="A cartography of accumulated disciplines."
+          eyebrow={t.story.eyebrow}
+          title={t.story.title}
         />
 
         <ol className="relative mt-12 border-l border-bronze/30 pl-6">
-          {TIMELINE.map((m, i) => (
-            <MobileTimelineItem key={m.year} item={m} index={i} total={TIMELINE.length} />
+          {t.story.timeline.map((m, i) => (
+            <MobileTimelineItem key={m.year} item={m} index={i} total={t.story.timeline.length} />
           ))}
         </ol>
       </div>
@@ -451,13 +417,13 @@ function Story() {
       {/* DESKTOP: scroll-driven sticky split (unchanged) */}
       <div
         className="hidden md:block"
-        style={{ height: `${TIMELINE.length * 90}vh` }}
+        style={{ height: `${t.story.timeline.length * 90}vh` }}
       >
         <div className="sticky top-0 flex min-h-dvh items-center py-24">
           <div className="mx-auto w-full max-w-6xl">
             <SectionHeader
-              eyebrow="Cap. II — Story"
-              title="A cartography of accumulated disciplines."
+              eyebrow={t.story.eyebrow}
+              title={t.story.title}
             />
 
             <div className="mt-16 grid gap-16 md:grid-cols-[1fr_1.4fr]">
@@ -473,7 +439,7 @@ function Story() {
                     strokeOpacity="0.3"
                     strokeDasharray="2 6"
                   />
-                  {TIMELINE.map((_, i) => {
+                  {t.story.timeline.map((_, i) => {
                     const y = 40 + i * 75;
                     const isActive = i === active;
                     const reached = i <= active;
@@ -516,7 +482,7 @@ function Story() {
                 </svg>
 
                 <ol className="relative ml-20 flex flex-col gap-[43px] pt-3">
-                  {TIMELINE.map((m, i) => (
+                  {t.story.timeline.map((m, i) => (
                     <li key={m.year}>
                       <button
                         onClick={() => {
@@ -527,7 +493,7 @@ function Story() {
                           const target =
                             window.scrollY +
                             rect.top +
-                            (0.05 + ((i + 0.5) / TIMELINE.length) * 0.9) * total;
+                            (0.05 + ((i + 0.5) / t.story.timeline.length) * 0.9) * total;
                           window.scrollTo({ top: target, behavior: "smooth" });
                         }}
                         className={`group flex items-baseline gap-4 text-left transition-colors ${
@@ -554,19 +520,19 @@ function Story() {
               >
                 <div className="border-l border-bronze/40 pl-8 md:pl-12">
                   <div className="label-eyebrow mb-6">
-                    Fragment {String(active + 1).padStart(2, "0")} / {TIMELINE.length}
+                    {t.story.fragmentLabel} {String(active + 1).padStart(2, "0")} / {t.story.timeline.length}
                   </div>
                   <h3 className="heading-display text-4xl md:text-5xl">
-                    {TIMELINE[active].title}
+                    {t.story.timeline[active].title}
                   </h3>
                   <p className="mt-8 text-lg leading-relaxed text-muted-foreground md:text-xl">
-                    {TIMELINE[active].body}
+                    {t.story.timeline[active].body}
                   </p>
 
                   <div className="mt-12 flex items-center gap-3">
                     <span className="h-px w-12 bg-bronze" />
                     <span className="font-mono text-[10px] tracking-[0.3em] text-bronze/70">
-                      {TIMELINE[active].year}
+                      {t.story.timeline[active].year}
                     </span>
                   </div>
 
@@ -574,11 +540,11 @@ function Story() {
                     <div className="relative h-px flex-1 bg-ivory/10">
                       <motion.div
                         className="absolute inset-y-0 left-0 bg-bronze"
-                        style={{ width: `${((active + 1) / TIMELINE.length) * 100}%` }}
+                        style={{ width: `${((active + 1) / t.story.timeline.length) * 100}%` }}
                       />
                     </div>
                     <span className="font-mono text-[10px] tracking-[0.3em] text-ivory/40">
-                      Scroll
+                      {t.story.scrollHint}
                     </span>
                   </div>
                 </div>
@@ -596,7 +562,7 @@ function MobileTimelineItem({
   index,
   total,
 }: {
-  item: (typeof TIMELINE)[number];
+  item: { year: string; title: string; body: string };
   index: number;
   total: number;
 }) {
@@ -662,21 +628,26 @@ function MobileTimelineItem({
 /* Method — Section III                                                       */
 /* -------------------------------------------------------------------------- */
 
-const METHOD = [
-  { id: "research", label: "Research", x: 12, y: 30, body: "Inhabit the territory before drawing the map." },
-  { id: "insight", label: "Insight", x: 30, y: 70, body: "Compress the noise into a single, load-bearing truth." },
-  { id: "strategy", label: "Strategy", x: 50, y: 25, body: "Sequence the moves that compound." },
-  { id: "design", label: "Design", x: 68, y: 65, body: "Translate intention into form, ritual, and constraint." },
-  { id: "execution", label: "Execution", x: 84, y: 35, body: "Ship with the discipline of someone who must live with it." },
-  { id: "scale", label: "Scale", x: 94, y: 72, body: "Build the structure that lets the system grow without losing its shape." },
-];
+const METHOD_POSITIONS: Record<string, { x: number; y: number }> = {
+  research:  { x: 12, y: 30 },
+  insight:   { x: 30, y: 70 },
+  strategy:  { x: 50, y: 25 },
+  design:    { x: 68, y: 65 },
+  execution: { x: 84, y: 35 },
+  scale:     { x: 94, y: 72 },
+};
 
 function MobileMethodAccordion() {
+  const t = useI18n();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const methodNodes = t.method.nodes.map(n => ({
+    ...n,
+    ...(METHOD_POSITIONS[n.id] ?? { x: 0, y: 0 }),
+  }));
 
   return (
     <div className="mt-10 flex flex-col gap-1">
-      {METHOD.map((n, i) => {
+      {methodNodes.map((n, i) => {
         const isOpen = openIndex === i;
         return (
           <div
@@ -726,8 +697,14 @@ function MobileMethodAccordion() {
 }
 
 function Method() {
+  const t = useI18n();
   const [hovered, setHovered] = useState<number | null>(null);
   const active = hovered;
+
+  const methodNodes = t.method.nodes.map(n => ({
+    ...n,
+    ...(METHOD_POSITIONS[n.id] ?? { x: 0, y: 0 }),
+  }));
 
   return (
     <section
@@ -736,8 +713,8 @@ function Method() {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeader
-          eyebrow="Cap. III — Method"
-          title="Not a process. A system of consequences."
+          eyebrow={t.method.eyebrow}
+          title={t.method.title}
         />
 
         {/* MOBILE: accordion */}
@@ -766,8 +743,8 @@ function Method() {
               </defs>
               <rect width="100" height="100" fill="url(#m-grid)" opacity="0.5" />
 
-              {METHOD.slice(0, -1).map((n, i) => {
-                const next = METHOD[i + 1];
+              {methodNodes.slice(0, -1).map((n, i) => {
+                const next = methodNodes[i + 1];
                 const isHot = active === i || active === i + 1;
                 return (
                   <motion.line
@@ -790,7 +767,7 @@ function Method() {
             </svg>
 
             {/* nodes + popover cards */}
-            {METHOD.map((n, i) => {
+            {methodNodes.map((n, i) => {
               const isActive = active === i;
               const flipBelow = n.y < 40;
               return (
@@ -885,7 +862,7 @@ function Method() {
           </div>
 
           <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-ivory/40">
-            Hover each stage to reveal
+            {t.method.hoverHint}
           </p>
         </div>
       </div>
@@ -898,10 +875,11 @@ function Method() {
 /* -------------------------------------------------------------------------- */
 
 function ProjectMobileCard({ project }: { project: CaseData }) {
+  const locale = useLocale();
   return (
     <Link
       to="/$lang/cases/$slug"
-      params={{ slug: project.slug }}
+      params={{ slug: project.slug, lang: locale }}
       aria-label={`Ver case: ${project.title}`}
       className="flex items-center gap-4 border-b border-ivory/10 py-5 last:border-b-0"
     >
@@ -922,6 +900,9 @@ function ProjectMobileCard({ project }: { project: CaseData }) {
 }
 
 function Projects() {
+  const t = useI18n();
+  const locale = useLocale();
+  const projects = cases.map(c => localizeCase(c, locale));
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
@@ -931,20 +912,20 @@ function Projects() {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeader
-          eyebrow="Cap. IV — Projects"
-          title="Artifacts, not portfolio entries."
+          eyebrow={t.projects.eyebrow}
+          title={t.projects.title}
         />
 
         {/* MOBILE: stacked cards */}
         <div className="mt-10 border-t border-ivory/10 md:hidden">
-          {PROJECTS.map((p) => (
+          {projects.map((p) => (
             <ProjectMobileCard key={p.n} project={p} />
           ))}
         </div>
 
         {/* DESKTOP: row layout */}
         <div className="mt-16 hidden divide-y divide-ivory/10 border-y border-ivory/10 md:block">
-          {PROJECTS.map((p, i) => (
+          {projects.map((p, i) => (
             <ProjectRow
               key={p.n}
               project={p}
@@ -973,10 +954,11 @@ function ProjectRow({
   onHover: () => void;
   onLeave: () => void;
 }) {
+  const locale = useLocale();
   return (
     <Link
       to="/$lang/cases/$slug"
-      params={{ slug: project.slug }}
+      params={{ slug: project.slug, lang: locale }}
       className="block"
       aria-label={`Ver case: ${project.title}`}
     >
@@ -1088,13 +1070,8 @@ function ProjectRow({
 /* Manifesto — Section V — Legacy                                             */
 /* -------------------------------------------------------------------------- */
 
-const MANIFESTO = [
-  "Every system tells a story.",
-  "Every product leaves a mark.",
-  "Every legacy begins as an idea — refined until it refuses to disappear.",
-];
-
 function Manifesto() {
+  const t = useI18n();
   return (
     <section
       id="legacy"
@@ -1106,11 +1083,11 @@ function Manifesto() {
       <div className="mx-auto max-w-5xl">
         <div className="label-eyebrow mb-10 flex items-center gap-4 md:mb-16">
           <span className="h-px w-10 bg-bronze" />
-          <span>Cap. V — Manifesto</span>
+          <span>{t.principles.eyebrow}</span>
         </div>
 
         <ol className="space-y-16 md:space-y-32">
-          {MANIFESTO.map((line, i) => (
+          {t.principles.lines.map((line, i) => (
             <motion.li
               key={i}
               initial={{ opacity: 0, y: 40 }}
@@ -1147,6 +1124,7 @@ function Manifesto() {
 /* -------------------------------------------------------------------------- */
 
 function Final() {
+  const t = useI18n();
   return (
     <section
       id="contact"
@@ -1156,19 +1134,18 @@ function Final() {
         <div>
           <div className="label-eyebrow mb-8 flex items-center gap-4 md:mb-10">
             <span className="h-px w-10 bg-bronze" />
-            <span>Cap. VI — Convergence</span>
+            <span>{t.contact.eyebrow}</span>
           </div>
 
           <h2 className="heading-display text-balance text-[clamp(2.4rem,6vw,5.5rem)] leading-[1.02]">
-            Let's build something
+            {t.contact.titleLine1}
             <br />
-            <span className="italic text-ivory/80">worth </span>
-            <span className="text-bronze">remembering</span>.
+            <span className="italic text-ivory/80">{t.contact.titleItalic}</span>
+            <span className="text-bronze">{t.contact.titleHighlight}</span>
           </h2>
 
           <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground md:mt-10 md:text-lg">
-            For collaborations, advisory work, and long-arc projects where the
-            outcome matters more than the cycle.
+            {t.contact.lead}
           </p>
 
           <div className="mt-10 flex flex-col items-stretch gap-6 md:mt-14 md:items-start">
@@ -1176,7 +1153,7 @@ function Final() {
               href="mailto:rodrigo@anselmo.studio"
               className="group inline-flex w-full items-center justify-center gap-5 border border-bronze px-8 py-5 text-xs uppercase tracking-[0.3em] text-ivory transition-colors hover:bg-bronze hover:text-navy-deep md:w-auto md:justify-start"
             >
-              <span>Start a conversation</span>
+              <span>{t.contact.cta}</span>
               <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
                 <path
                   d="M0 5 H18 M14 1 L18 5 L14 9"
@@ -1205,7 +1182,7 @@ function Final() {
           <div className="relative">
             <Monolith size={120} />
             <span className="absolute -left-12 top-1/2 hidden -translate-y-1/2 -rotate-90 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.35em] text-bronze/70 md:block">
-              Monolith · Complete
+              {t.contact.monolithLabel}
             </span>
           </div>
         </div>
@@ -1219,14 +1196,15 @@ function Final() {
 /* -------------------------------------------------------------------------- */
 
 function Footer() {
+  const t = useI18n();
   return (
     <footer className="relative border-t border-ivory/10 px-5 pb-28 pt-10 md:pb-10 md:pl-32 md:pr-16">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center text-[10px] uppercase tracking-[0.3em] text-ivory/45 md:flex-row md:items-center md:text-left">
-        <span>© MMXXVI · Rodrigo Anselmo</span>
+        <span>{t.footer.copyright}</span>
         <span className="hidden font-mono md:block">
-          Lat 23°33′44″S · Lon 46°38′20″W · São Paulo
+          {t.footer.location}
         </span>
-        <span>Archive · v.1</span>
+        <span>{t.footer.archive}</span>
       </div>
     </footer>
   );

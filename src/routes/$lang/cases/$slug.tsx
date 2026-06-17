@@ -5,12 +5,14 @@ import { LivingBackground } from "@/components/LivingBackground";
 import { cases, localizeCase } from "@/data/cases";
 import type { CaseData, CaseSection } from "@/data/cases";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useI18n, useLocale } from "@/i18n/context";
+import { isLocale } from "@/i18n/config";
 
 export const Route = createFileRoute("/$lang/cases/$slug")({
   loader: ({ params }) => {
     const c = cases.find((c) => c.slug === params.slug);
     if (!c) throw notFound();
-    return localizeCase(c, "pt"); // Phase 4 will make this locale-aware
+    return localizeCase(c, isLocale(params.lang) ? params.lang : "pt");
   },
   head: ({ loaderData }) => ({
     meta: [
@@ -21,13 +23,14 @@ export const Route = createFileRoute("/$lang/cases/$slug")({
   component: CasePage,
   notFoundComponent: () => (
     <div className="flex h-dvh items-center justify-center text-ivory/50">
-      Case not found.
+      Case não encontrado.
     </div>
   ),
 });
 
 function CasePage() {
   const c = Route.useLoaderData();
+  const locale = useLocale();
   useEffect(() => {
     document.title = `${c.title} — Rodrigo Anselmo`;
     return () => { document.title = "Rodrigo Anselmo — Builder of Digital Legacies"; };
@@ -48,13 +51,15 @@ function CasePage() {
             <CaseSectionBlock key={i} section={section} slug={c.slug} />
           ))}
         </div>
-        <CaseFooter cases={cases.map(x => localizeCase(x, "pt"))} current={c} />
+        <CaseFooter cases={cases.map(x => localizeCase(x, locale))} current={c} />
       </main>
     </div>
   );
 }
 
 function CaseHero({ case: c }: { case: CaseData }) {
+  const t = useI18n();
+  const { lang } = Route.useParams();
   const coverSrc = `${import.meta.env.BASE_URL}cases/${c.slug}/${c.cover}`;
   return (
     <section
@@ -81,15 +86,16 @@ function CaseHero({ case: c }: { case: CaseData }) {
       <Link
         to="/$lang"
         hash="projects"
+        params={{ lang }}
         className="label-eyebrow absolute right-8 top-8 z-10 opacity-60 transition-opacity hover:opacity-100"
       >
-        ← Arquivo
+        {t.case.backToArchive}
       </Link>
 
       {/* centered title block */}
       <div className="relative z-10 text-center">
         <p className="label-eyebrow mb-4">
-          Case {c.n}&nbsp;&nbsp;·&nbsp;&nbsp;
+          {t.case.caseLabel} {c.n}&nbsp;&nbsp;·&nbsp;&nbsp;
           {c.roles.join(" · ")}
         </p>
         <h1 className="heading-display text-3xl md:text-7xl lg:text-8xl">
@@ -101,11 +107,12 @@ function CaseHero({ case: c }: { case: CaseData }) {
 }
 
 function CaseMetadata({ case: c }: { case: CaseData }) {
+  const t = useI18n();
   const items = [
-    { label: "Cliente", value: c.client },
-    { label: "Ferramentas", value: c.tools.join(" · ") },
-    { label: "Ano", value: c.year },
-    { label: "Papel", value: c.roles.join(" · ") },
+    { label: t.case.client, value: c.client },
+    { label: t.case.tools, value: c.tools.join(" · ") },
+    { label: t.case.year, value: c.year },
+    { label: t.case.role, value: c.roles.join(" · ") },
   ];
 
   return (
@@ -196,6 +203,8 @@ function CaseFooter({
   cases: CaseData[];
   current: CaseData;
 }) {
+  const t = useI18n();
+  const { lang } = Route.useParams();
   const idx = cases.findIndex((c) => c.slug === current.slug);
   const prev = idx > 0 ? cases[idx - 1] : null;
   const next = idx < cases.length - 1 ? cases[idx + 1] : null;
@@ -210,12 +219,12 @@ function CaseFooter({
         {prev && (
           <Link
             to="/$lang/cases/$slug"
-            params={{ slug: prev.slug }}
+            params={{ slug: prev.slug, lang }}
             className="group flex min-h-[56px] items-center gap-4 rounded-sm border border-bronze/20 px-4 py-3 transition-colors hover:border-bronze/50"
           >
             <span className="label-eyebrow opacity-60">←</span>
             <div>
-              <span className="label-eyebrow block opacity-60">Anterior</span>
+              <span className="label-eyebrow block opacity-60">{t.case.previous}</span>
               <span className="font-display text-lg text-ivory">{prev.title}</span>
             </div>
           </Link>
@@ -223,18 +232,19 @@ function CaseFooter({
         <Link
           to="/$lang"
           hash="projects"
+          params={{ lang }}
           className="label-eyebrow flex min-h-[44px] items-center justify-center rounded-sm border border-bronze/10 px-4 py-2 opacity-60 transition-opacity hover:opacity-100"
         >
-          Arquivo
+          {t.case.archive}
         </Link>
         {next && (
           <Link
             to="/$lang/cases/$slug"
-            params={{ slug: next.slug }}
+            params={{ slug: next.slug, lang }}
             className="group flex min-h-[56px] items-center justify-end gap-4 rounded-sm border border-bronze/20 px-4 py-3 text-right transition-colors hover:border-bronze/50"
           >
             <div>
-              <span className="label-eyebrow block opacity-60">Próximo</span>
+              <span className="label-eyebrow block opacity-60">{t.case.next}</span>
               <span className="font-display text-lg text-ivory">{next.title}</span>
             </div>
             <span className="label-eyebrow opacity-60">→</span>
@@ -247,10 +257,10 @@ function CaseFooter({
         {prev ? (
           <Link
             to="/$lang/cases/$slug"
-            params={{ slug: prev.slug }}
+            params={{ slug: prev.slug, lang }}
             className="group flex flex-col"
           >
-            <span className="label-eyebrow mb-1 opacity-60">← Anterior</span>
+            <span className="label-eyebrow mb-1 opacity-60">← {t.case.previous}</span>
             <span className="font-display text-xl text-ivory transition-colors group-hover:text-bronze">
               {prev.title}
             </span>
@@ -261,17 +271,18 @@ function CaseFooter({
         <Link
           to="/$lang"
           hash="projects"
+          params={{ lang }}
           className="label-eyebrow opacity-60 transition-opacity hover:opacity-100"
         >
-          Arquivo
+          {t.case.archive}
         </Link>
         {next ? (
           <Link
             to="/$lang/cases/$slug"
-            params={{ slug: next.slug }}
+            params={{ slug: next.slug, lang }}
             className="group flex flex-col items-end"
           >
-            <span className="label-eyebrow mb-1 opacity-60">Próximo →</span>
+            <span className="label-eyebrow mb-1 opacity-60">{t.case.next} →</span>
             <span className="font-display text-xl text-ivory transition-colors group-hover:text-bronze">
               {next.title}
             </span>

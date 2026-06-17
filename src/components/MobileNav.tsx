@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLocale } from "@/i18n/context";
 
 type ActiveSection = "home" | "work" | "contact";
 
@@ -77,7 +78,12 @@ function useSectionObserver(): ActiveSection {
 export function MobileNav() {
   const isMobile = useIsMobile();
   const location = useLocation();
-  const isHomePage = location.pathname === "/" || location.pathname === "/portfolio/";
+  const locale = useLocale();
+  const isHomePage =
+    location.pathname === `/${locale}/` ||
+    location.pathname === `/${locale}` ||
+    location.pathname === "/" ||
+    location.pathname === "/portfolio/";
   const active = useSectionObserver();
 
   if (!isMobile) return null;
@@ -144,7 +150,8 @@ export function MobileNav() {
         ) : (
           <>
             <Link
-              to="/"
+              to="/$lang/"
+              params={{ lang: locale }}
               aria-label="Ir para início"
               className="flex min-h-[36px] min-w-[44px] items-center justify-center"
             >
@@ -154,8 +161,9 @@ export function MobileNav() {
             {divider}
 
             <Link
-              to="/"
+              to="/$lang/"
               hash="projects"
+              params={{ lang: locale }}
               aria-label="Ver projetos"
               className="flex min-h-[36px] min-w-[44px] items-center justify-center"
             >
@@ -165,8 +173,9 @@ export function MobileNav() {
             {divider}
 
             <Link
-              to="/"
+              to="/$lang/"
               hash="contact"
+              params={{ lang: locale }}
               aria-label="Entrar em contato"
               className="flex min-h-[36px] min-w-[44px] items-center justify-center"
             >

@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Link, useRouterState } from "@tanstack/react-router";
-
-const SECTIONS = [
-  { id: "vision", label: "Vision", num: "I" },
-  { id: "story", label: "Story", num: "II" },
-  { id: "method", label: "Method", num: "III" },
-  { id: "projects", label: "Projects", num: "IV" },
-  { id: "legacy", label: "Legacy", num: "V" },
-  { id: "contact", label: "Contact", num: "VI" },
-];
+import { useI18n, useLocale } from "@/i18n/context";
 
 /**
  * Vertical monolith navigation. The symbol assembles itself as the user
  * progresses through the sections — each section reveals one more node.
  */
 export function MonolithNav() {
+  const t = useI18n();
+  const locale = useLocale();
+  const SECTIONS = t.nav.sections;
   const [active, setActive] = useState(0);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isOnHome = pathname === "/" || pathname === "";
+  const isOnHome =
+    pathname === `/${locale}/` ||
+    pathname === `/${locale}` ||
+    pathname === "/";
 
   useEffect(() => {
     if (!isOnHome) return;
@@ -36,7 +34,7 @@ export function MonolithNav() {
       observers.push(obs);
     });
     return () => observers.forEach((o) => o.disconnect());
-  }, [isOnHome]);
+  }, [isOnHome, SECTIONS]);
 
   return (
     <nav
@@ -53,8 +51,9 @@ export function MonolithNav() {
           return (
             <li key={s.id}>
               <Link
-                to="/"
+                to="/$lang/"
                 hash={s.id}
+                params={{ lang: locale }}
                 className="group relative flex items-center"
                 aria-current={isActive ? "true" : undefined}
               >
