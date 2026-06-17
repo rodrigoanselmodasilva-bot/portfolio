@@ -4,6 +4,7 @@ import { isLocale, DEFAULT_LOCALE } from "@/i18n/config";
 import type { Locale } from "@/i18n/config";
 import { I18nProvider } from "@/i18n/context";
 import { dictionaries } from "@/i18n/dictionaries";
+import { MobileNav } from "@/components/MobileNav";
 
 export const Route = createFileRoute("/$lang")({
   beforeLoad: ({ params }) => {
@@ -32,6 +33,7 @@ function LangLayout() {
   return (
     <I18nProvider locale={locale as Locale} dictionary={dictionary}>
       <Outlet />
+      <MobileNav />
     </I18nProvider>
   );
 }
